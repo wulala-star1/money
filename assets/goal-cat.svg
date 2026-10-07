@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%">
+  <defs>
+    <linearGradient id="catBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF8F2"/>
+      <stop offset="100%" stop-color="#FDF1E8"/>
+    </linearGradient>
+    <filter id="softCatShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="5" stdDeviation="7" flood-color="#724B36" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+
+  <rect width="400" height="300" rx="20" fill="url(#catBg)"/>
+
+  <!-- 地毯与小窝线条 -->
+  <path d="M 40 245 C 100 238, 300 238, 360 245" stroke="#E9DCcf" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- 猫罐头小插图 -->
+  <g transform="translate(60, 160)" filter="url(#softCatShadow)">
+    <ellipse cx="36" cy="48" rx="28" ry="10" fill="#E8DDD2" stroke="#B8A495" stroke-width="1.8"/>
+    <path d="M 8 48 L 8 26 C 8 21, 64 21, 64 26 L 64 48" fill="#FCECE1" stroke="#B8A495" stroke-width="1.8"/>
+    <ellipse cx="36" cy="24" rx="28" ry="10" fill="#FFE5D4" stroke="#B8A495" stroke-width="1.8"/>
+    <ellipse cx="36" cy="24" rx="18" ry="6" fill="#F4A261" opacity="0.6"/>
+    <!-- 鱼骨头小标签 -->
+    <path d="M 22 36 L 50 36 M 28 32 L 28 40 M 36 31 L 36 41 M 44 33 L 44 39" stroke="#E76F51" stroke-width="1.8" stroke-linecap="round"/>
+  </g>
+
+  <!-- 储蓄玻璃罐（带有小硬币与爱心标签） -->
+  <g transform="translate(265, 110)" filter="url(#softCatShadow)">
+    <rect x="18" y="10" width="34" height="12" rx="4" fill="#D8CBC4" stroke="#9A8374" stroke-width="1.8"/>
+    <rect x="8" y="22" width="54" height="85" rx="16" fill="#FFFFFF" fill-opacity="0.75" stroke="#C2B1A5" stroke-width="2"/>
+    <!-- 里面的金币 -->
+    <circle cx="26" cy="85" r="11" fill="#FFD166" stroke="#E29525" stroke-width="1.5"/>
+    <circle cx="42" cy="78" r="11" fill="#FFD166" stroke="#E29525" stroke-width="1.5"/>
+    <circle cx="34" cy="64" r="11" fill="#FFD166" stroke="#E29525" stroke-width="1.5"/>
+    <!-- 贴纸便签 -->
+    <rect x="16" y="42" width="38" height="20" rx="3" fill="#FFEFEA" stroke="#E79B82" stroke-width="1"/>
+    <text x="35" y="55" font-size="8" font-family="sans-serif" font-weight="bold" fill="#D3543A" text-anchor="middle">CAT FUND</text>
+  </g>
+
+  <!-- 酣睡的小橘猫主体 -->
+  <g transform="translate(130, 115)" filter="url(#softCatShadow)">
+    <!-- 弯弯的猫尾巴 -->
+    <path d="M 30 90 C 0 85, 0 45, 18 50 C 25 54, 20 75, 45 80" fill="none" stroke="#E76F51" stroke-width="14" stroke-linecap="round"/>
+    
+    <!-- 身体蜷缩大球 -->
+    <ellipse cx="85" cy="80" rx="55" ry="42" fill="#F4A261" stroke="#D36B4F" stroke-width="2"/>
+    <!-- 橘猫花纹 -->
+    <path d="M 75 42 Q 85 58 95 42" stroke="#E76F51" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M 105 48 Q 115 62 122 48" stroke="#E76F51" stroke-width="3" fill="none" stroke-linecap="round"/>
+    
+    <!-- 猫脑袋 -->
+    <circle cx="120" cy="74" r="30" fill="#F4A261" stroke="#D36B4F" stroke-width="2"/>
+    
+    <!-- 猫耳朵 -->
+    <path d="M 108 48 L 118 30 L 130 46 Z" fill="#E76F51" stroke="#D36B4F" stroke-width="2"/>
+    <path d="M 134 49 L 146 34 L 148 55 Z" fill="#E76F51" stroke="#D36B4F" stroke-width="2"/>
+    <path d="M 114 44 L 120 36 L 126 44 Z" fill="#FFCDB2"/>
+    
+    <!-- 睡着的弯弯笑眼 -->
+    <path d="M 126 70 Q 131 75 136 70" fill="none" stroke="#5D3A29" stroke-width="2" stroke-linecap="round"/>
+    <path d="M 140 70 Q 144 75 148 70" fill="none" stroke="#5D3A29" stroke-width="2" stroke-linecap="round"/>
+    
+    <!-- 小鼻子与胡须 -->
+    <polygon points="140,77 144,77 142,80" fill="#E76F51"/>
+    <path d="M 144 74 L 154 73 M 144 77 L 155 78 M 143 80 L 153 84" stroke="#A6674B" stroke-width="1.2" stroke-linecap="round"/>
+
+    <!-- 萌萌小腮红 -->
+    <ellipse cx="128" cy="76" rx="5" ry="3" fill="#E76F51" opacity="0.35"/>
+    <ellipse cx="146" cy="76" rx="5" ry="3" fill="#E76F51" opacity="0.35"/>
+
+    <!-- 前爪收在胸前 -->
+    <ellipse cx="100" cy="110" rx="14" ry="10" fill="#FFFFFF" stroke="#D36B4F" stroke-width="1.8"/>
+    <ellipse cx="118" cy="110" rx="12" ry="9" fill="#FFFFFF" stroke="#D36B4F" stroke-width="1.8"/>
+  </g>
+
+  <!-- 漂浮的惬意 "z Z" 与爱心 -->
+  <g fill="#D36B4F">
+    <text x="260" y="90" font-size="16" font-family="'Courier New', monospace" font-weight="bold" opacity="0.7">z</text>
+    <text x="274" y="75" font-size="20" font-family="'Courier New', monospace" font-weight="bold" opacity="0.5">Z</text>
+    <path d="M 175 60 C 175 56 170 52 166 56 C 162 52 156 56 156 60 C 156 67 166 71 166 71 C 166 71 175 67 175 60 Z" fill="#E76F51" opacity="0.75"/>
+  </g>
+</svg>

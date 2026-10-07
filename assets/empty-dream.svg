@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%">
+  <defs>
+    <linearGradient id="warmBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF5EE"/>
+      <stop offset="100%" stop-color="#FDF0E7"/>
+    </linearGradient>
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#7A4F35" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+
+  <!-- 背景画布 -->
+  <rect width="400" height="300" rx="20" fill="url(#warmBg)"/>
+  
+  <!-- 桌面与手账背景装饰 -->
+  <path d="M 20 250 Q 200 248 380 250" stroke="#E6D6CA" stroke-width="2.5" stroke-linecap="round"/>
+  
+  <!-- 治愈手账心愿便签本 -->
+  <g transform="translate(180, 75) rotate(6)" filter="url(#softShadow)">
+    <rect x="0" y="0" width="140" height="160" rx="10" fill="#FFFFFF" stroke="#EFE6DD" stroke-width="1.5"/>
+    <rect x="10" y="10" width="120" height="18" rx="4" fill="#FFE6D7" opacity="0.7"/>
+    <!-- 便签网格线条 -->
+    <line x1="16" y1="46" x2="124" y2="46" stroke="#EFE8E1" stroke-width="1.5" stroke-dasharray="3 3"/>
+    <line x1="16" y1="68" x2="124" y2="68" stroke="#EFE8E1" stroke-width="1.5" stroke-dasharray="3 3"/>
+    <line x1="16" y1="90" x2="124" y2="90" stroke="#EFE8E1" stroke-width="1.5" stroke-dasharray="3 3"/>
+    <line x1="16" y1="112" x2="124" y2="112" stroke="#EFE8E1" stroke-width="1.5" stroke-dasharray="3 3"/>
+    <line x1="16" y1="134" x2="80" y2="134" stroke="#EFE8E1" stroke-width="1.5" stroke-dasharray="3 3"/>
+    <!-- 小红心插画 -->
+    <path d="M 112 136 C 112 132 106 128 102 132 C 98 128 92 132 92 136 C 92 144 102 149 102 149 C 102 149 112 144 112 136 Z" fill="#FF8364" opacity="0.85"/>
+  </g>
+
+  <!-- 温馨小猪存钱罐主体 -->
+  <g transform="translate(70, 95)" filter="url(#softShadow)">
+    <!-- 猪耳朵 -->
+    <path d="M 52 38 Q 42 16 62 20 Z" fill="#FFA588" stroke="#D36B4F" stroke-width="2"/>
+    <path d="M 124 35 Q 142 18 132 26 Z" fill="#FFA588" stroke="#D36B4F" stroke-width="2"/>
+    <!-- 身体 -->
+    <ellipse cx="95" cy="80" rx="68" ry="58" fill="#FFE6DC" stroke="#D36B4F" stroke-width="2.5"/>
+    <path d="M 45 65 Q 95 38 145 65" fill="none" stroke="#FFF" stroke-width="4" stroke-linecap="round" opacity="0.6"/>
+    <!-- 存钱口 -->
+    <rect x="76" y="32" width="38" height="6" rx="3" fill="#693C29"/>
+    <!-- 投币金币动效轨迹 -->
+    <g transform="translate(85, -5)">
+      <circle cx="10" cy="12" r="14" fill="#FFD058" stroke="#E89B1F" stroke-width="2"/>
+      <circle cx="10" cy="12" r="10" fill="#FFE58F"/>
+      <!-- 金币星芒 -->
+      <path d="M 10 7 L 11 11 L 15 12 L 11 13 L 10 17 L 9 13 L 5 12 L 9 11 Z" fill="#D48806"/>
+    </g>
+    <!-- 小猪鼻子 -->
+    <ellipse cx="50" cy="84" rx="20" ry="14" fill="#FF9A7B" stroke="#D36B4F" stroke-width="2"/>
+    <circle cx="43" cy="84" r="3" fill="#913B26"/>
+    <circle cx="57" cy="84" r="3" fill="#913B26"/>
+    <!-- 眼睛微笑 -->
+    <circle cx="78" cy="68" r="3.5" fill="#3D2A24"/>
+    <path d="M 76 77 Q 82 82 88 77" fill="none" stroke="#D36B4F" stroke-width="2" stroke-linecap="round"/>
+    <!-- 腮红 -->
+    <ellipse cx="70" cy="78" rx="8" ry="5" fill="#FF6B4A" opacity="0.3"/>
+    <!-- 四只可爱小短腿 -->
+    <rect x="52" y="126" width="16" height="15" rx="7" fill="#FFA588" stroke="#D36B4F" stroke-width="2"/>
+    <rect x="116" y="126" width="16" height="15" rx="7" fill="#FFA588" stroke="#D36B4F" stroke-width="2"/>
+    <!-- 卷卷小尾巴 -->
+    <path d="M 160 76 Q 174 72 170 85 Q 165 92 158 84" fill="none" stroke="#D36B4F" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+
+  <!-- 散落的小星星与希望光芒 -->
+  <g fill="#FFA940">
+    <path d="M 60 50 Q 60 60 70 60 Q 60 60 60 70 Q 60 60 50 60 Q 60 60 60 50 Z"/>
+    <path d="M 330 60 Q 330 68 338 68 Q 330 68 330 76 Q 330 68 322 68 Q 330 68 330 60 Z"/>
+    <circle cx="345" cy="180" r="3" fill="#69C0BA"/>
+    <circle cx="45" cy="180" r="2.5" fill="#FF8364"/>
+  </g>
+</svg>

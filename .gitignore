@@ -1,0 +1,9 @@
+# 临时或校验截图
+*.png
+!assets/*.png
+*.jpg
+!assets/*.jpg
+
+# 操作系统文件
+.DS_Store
+Thumbs.db

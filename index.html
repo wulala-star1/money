@@ -1,0 +1,2964 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#FAF7F2" />
+  <title>小猪存钱 · 把每个心愿存成生活</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="小猪存钱" />
+  <style>
+    /* ==========================================================================
+       1. 手账质感设计系统 (Warm Stationery Design System)
+       ========================================================================== */
+    :root {
+      --bg-page: #FAF7F2;
+      --bg-surface: #FFFFFF;
+      --bg-subtle: #F5EFEB;
+      --bg-badge: #FFF2EB;
+      
+      --ink-primary: #2C2623;
+      --ink-secondary: #6B615A;
+      --ink-muted: #968B83;
+      --ink-light: #BFB5AD;
+      
+      --accent: #E6643B;
+      --accent-hover: #D3532B;
+      --accent-light: #FFF0E8;
+      --accent-border: #FFD4C2;
+      
+      --green: #3F8A6B;
+      --green-light: #EDF7F1;
+      --green-border: #C8E8D7;
+      
+      --blue: #407BA7;
+      --blue-light: #EDF4FA;
+      
+      --purple: #7563A8;
+      --purple-light: #F3EFFC;
+      
+      --border-line: #EFE7DF;
+      --border-dark: #DFD5CC;
+      
+      --shadow-sm: 0 2px 8px rgba(84, 58, 41, 0.04);
+      --shadow-md: 0 8px 24px rgba(84, 58, 41, 0.06);
+      --shadow-lg: 0 16px 40px rgba(84, 58, 41, 0.09);
+      --shadow-hover: 0 14px 34px rgba(84, 58, 41, 0.12);
+      
+      --radius-sm: 10px;
+      --radius-md: 16px;
+      --radius-lg: 22px;
+      --radius-xl: 28px;
+      
+      --font-family: Outfit, -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      --ease: cubic-bezier(0.2, 0.8, 0.25, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+    [hidden] { display: none !important; }
+
+    html {
+      min-height: 100%;
+      background-color: var(--bg-page);
+    }
+
+    body {
+      min-height: 100%;
+      background:
+        radial-gradient(ellipse at 8% 5%, rgba(255, 237, 224, 0.7) 0%, transparent 45%),
+        radial-gradient(ellipse at 92% 18%, rgba(246, 236, 228, 0.8) 0%, transparent 40%),
+        var(--bg-page);
+      color: var(--ink-primary);
+      font-family: var(--font-family);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    button, input, select, textarea {
+      font: inherit;
+      color: inherit;
+    }
+
+    button {
+      border: 0;
+      background: none;
+      cursor: pointer;
+    }
+
+    button:focus-visible, input:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    /* 桌面与移动端外层容器 */
+    .app-shell {
+      width: min(100%, 1160px);
+      margin: 0 auto;
+      padding: 28px 24px 120px;
+    }
+
+    /* ==========================================================================
+       2. 顶部导航与品牌区 (Top Bar & Branding)
+       ========================================================================== */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 32px;
+      padding: 12px 18px;
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid var(--border-line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      backdrop-filter: blur(12px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none;
+    }
+
+    .brand-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1.5px solid var(--accent-border);
+      box-shadow: 0 4px 12px rgba(230, 100, 59, 0.15);
+      background: #FFEBDD;
+      flex-shrink: 0;
+    }
+
+    .brand-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .brand-text h1 {
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      color: var(--ink-primary);
+    }
+
+    .brand-text p {
+      font-size: 12px;
+      color: var(--ink-muted);
+      margin-top: 2px;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .desktop-nav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--bg-subtle);
+      padding: 4px;
+      border-radius: 14px;
+      border: 1px solid var(--border-line);
+    }
+
+    .desktop-nav button {
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink-secondary);
+      transition: all 0.2s var(--ease);
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      outline: none;
+    }
+
+    .desktop-nav button:hover {
+      color: var(--accent);
+      background: rgba(255, 255, 255, 0.6);
+    }
+
+    .desktop-nav button:active {
+      transform: scale(0.96);
+    }
+
+    .desktop-nav button.active {
+      color: var(--accent);
+      background: #FFFFFF;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    }
+
+    /* 通用按键体系 */
+    .primary-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 20px;
+      border-radius: 14px;
+      background: var(--accent);
+      color: #FFFFFF;
+      font-size: 14px;
+      font-weight: 700;
+      box-shadow: 0 6px 18px rgba(230, 100, 59, 0.24);
+      transition: all 0.2s var(--ease);
+      border: 1px solid transparent;
+    }
+
+    .primary-btn:hover {
+      background: var(--accent-hover);
+      box-shadow: 0 8px 22px rgba(230, 100, 59, 0.32);
+      transform: translateY(-1px);
+    }
+
+    .primary-btn:active {
+      transform: scale(0.97);
+    }
+
+    .ghost-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 18px;
+      border-radius: 12px;
+      background: var(--bg-subtle);
+      color: var(--ink-secondary);
+      font-size: 13px;
+      font-weight: 600;
+      border: 1px solid var(--border-line);
+      transition: all 0.2s var(--ease);
+    }
+
+    .ghost-btn:hover {
+      background: #ECE5DE;
+      color: var(--ink-primary);
+    }
+
+    .icon-btn {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: #FFFFFF;
+      border: 1px solid var(--border-line);
+      color: var(--ink-secondary);
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s var(--ease);
+    }
+
+    .icon-btn:hover {
+      color: var(--ink-primary);
+      border-color: var(--border-dark);
+      transform: translateY(-1px);
+    }
+
+    /* ==========================================================================
+       3. 页面容器与切换 (Views)
+       ========================================================================== */
+    .view {
+      display: none;
+      animation: viewSlideIn 0.25s var(--ease) both;
+    }
+
+    .view.active {
+      display: block;
+    }
+
+    @keyframes viewSlideIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 页面抬头 */
+    .page-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .page-head h2 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--ink-primary);
+    }
+
+    .page-head p {
+      margin-top: 4px;
+      font-size: 14px;
+      color: var(--ink-muted);
+    }
+
+    .welcome-kicker {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    .filter-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      background: #FFFFFF;
+      border: 1px solid var(--border-line);
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink-secondary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* ==========================================================================
+       4. 手账主视觉 Banner (Hero Journal Card)
+       ========================================================================== */
+    .hero-banner {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 210px;
+      align-items: center;
+      gap: 24px;
+      padding: 32px 36px;
+      margin-bottom: 32px;
+      border-radius: var(--radius-xl);
+      background: linear-gradient(135deg, #FFF6EE 0%, #FFFDF8 60%, #FBF3E8 100%);
+      border: 1.5px solid #F5E5D8;
+      box-shadow: 0 10px 30px rgba(135, 90, 60, 0.08);
+      overflow: hidden;
+    }
+
+    /* 手账纸胶带小装饰 */
+    .hero-banner::before {
+      content: "";
+      position: absolute;
+      top: -6px;
+      left: 45px;
+      width: 80px;
+      height: 18px;
+      background: rgba(230, 100, 59, 0.22);
+      transform: rotate(-3deg);
+      border-radius: 2px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+
+    .hero-content h2 {
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+      color: var(--ink-primary);
+    }
+
+    .hero-content p {
+      margin-top: 10px;
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--ink-secondary);
+      max-width: 520px;
+    }
+
+    .hero-quick-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .hero-badge-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid var(--accent-border);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .hero-illustration {
+      position: relative;
+      width: 170px;
+      height: 170px;
+      border-radius: 24px;
+      overflow: hidden;
+      border: 2px solid #FFFFFF;
+      box-shadow: 0 12px 28px rgba(116, 71, 46, 0.12);
+      justify-self: end;
+      background: #FFE8D6;
+    }
+
+    .hero-illustration img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ==========================================================================
+       5. 存钱目标卡片网格 (Goal Cards)
+       ========================================================================== */
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .section-head h3 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--ink-primary);
+      letter-spacing: -0.01em;
+    }
+
+    .section-head .sub {
+      font-size: 13px;
+      color: var(--ink-muted);
+    }
+
+    .goal-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+
+    .goal-card {
+      position: relative;
+      background: var(--bg-surface);
+      border: 1.5px solid var(--border-line);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      transition: transform 0.24s var(--ease), box-shadow 0.24s var(--ease), border-color 0.24s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .goal-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+      border-color: #E2D3C4;
+    }
+
+    /* 封面图容器 */
+    .goal-card-cover {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      background: var(--bg-subtle);
+      overflow: hidden;
+    }
+
+    .goal-card-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s var(--ease);
+    }
+
+    .goal-card:hover .goal-card-cover img {
+      transform: scale(1.04);
+    }
+
+    .goal-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #FFFFFF;
+      background: rgba(44, 38, 35, 0.7);
+      backdrop-filter: blur(8px);
+    }
+
+    .goal-badge.done {
+      background: var(--green);
+    }
+
+    /* 卡片主体 */
+    .goal-card-body {
+      padding: 18px 20px 20px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .goal-title-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .goal-card-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--ink-primary);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+    }
+
+    .goal-menu {
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .goal-menu-btn {
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      color: var(--ink-muted);
+      transition: all 0.15s ease;
+    }
+
+    .goal-menu-btn:hover {
+      background: var(--bg-subtle);
+      color: var(--ink-primary);
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: 34px;
+      right: 0;
+      z-index: 20;
+      display: none;
+      min-width: 130px;
+      padding: 6px;
+      background: #FFFFFF;
+      border: 1px solid var(--border-line);
+      border-radius: 12px;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .dropdown-menu.open {
+      display: block;
+      animation: menuPop 0.18s var(--ease);
+    }
+
+    @keyframes menuPop {
+      from { opacity: 0; transform: translateY(-4px) scale(0.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .dropdown-menu button {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--ink-secondary);
+      text-align: left;
+    }
+
+    .dropdown-menu button:hover {
+      background: var(--bg-subtle);
+      color: var(--ink-primary);
+    }
+
+    .dropdown-menu button.danger {
+      color: #D34B38;
+    }
+
+    .dropdown-menu button.danger:hover {
+      background: #FFF0ED;
+    }
+
+    /* 进度条与数值 */
+    .goal-progress-box {
+      margin-top: 14px;
+    }
+
+    .goal-amounts {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .goal-amounts .saved {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--ink-primary);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .goal-amounts .target {
+      font-size: 12px;
+      color: var(--ink-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .progress-track {
+      height: 8px;
+      border-radius: 10px;
+      background: var(--bg-subtle);
+      overflow: hidden;
+      border: 1px solid var(--border-line);
+    }
+
+    .progress-bar {
+      height: 100%;
+      border-radius: 8px;
+      background: linear-gradient(90deg, #F5784C, #E6643B);
+      transition: width 0.6s var(--ease);
+    }
+
+    .goal-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--border-line);
+      font-size: 12px;
+      color: var(--ink-muted);
+    }
+
+    .goal-percent-text {
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    /* ==========================================================================
+       6. 统计面板与洞察指标 (Insights & Dashboard)
+       ========================================================================== */
+    .stat-cards-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 1fr 1fr;
+      gap: 18px;
+      margin-top: 32px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      padding: 22px 24px;
+      border-radius: var(--radius-lg);
+      background: var(--bg-surface);
+      border: 1.5px solid var(--border-line);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .stat-card.warm {
+      background: linear-gradient(135deg, #FFF6EE 0%, #FFFDFB 100%);
+      border-color: #F8DFD2;
+    }
+
+    .stat-card.green {
+      background: linear-gradient(135deg, #F0F9F4 0%, #FFFFFF 100%);
+      border-color: #D3ECD9;
+    }
+
+    .stat-card.purple {
+      background: linear-gradient(135deg, #F5F2FC 0%, #FFFFFF 100%);
+      border-color: #DFD7F2;
+    }
+
+    .stat-card-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink-secondary);
+    }
+
+    .stat-card-num {
+      margin: 10px 0 4px;
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .stat-card.warm .stat-card-num { color: var(--accent); }
+    .stat-card.green .stat-card-num { color: var(--green); }
+    .stat-card.purple .stat-card-num { color: var(--purple); }
+
+    .stat-card-desc {
+      font-size: 12px;
+      color: var(--ink-muted);
+    }
+
+    /* 手账生活小贴士提示卡 */
+    .tips-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .tip-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 20px;
+      border-radius: var(--radius-md);
+      background: #FFFFFF;
+      border: 1px solid var(--border-line);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .tip-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: var(--bg-badge);
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .tip-icon.blue {
+      background: var(--blue-light);
+      color: var(--blue);
+    }
+
+    .tip-body h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ink-primary);
+    }
+
+    .tip-body p {
+      font-size: 12px;
+      color: var(--ink-muted);
+      margin-top: 2px;
+    }
+
+    /* 最近记录卡片 */
+    .recent-records-card {
+      background: #FFFFFF;
+      border: 1.5px solid var(--border-line);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .journal-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .journal-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 4px;
+      border-bottom: 1px dashed var(--border-line);
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .journal-row:last-child {
+      border-bottom: 0;
+    }
+
+    .journal-row:hover .journal-row-title {
+      color: var(--accent);
+    }
+
+    .journal-thumb {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-line);
+      flex-shrink: 0;
+    }
+
+    .journal-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .journal-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .journal-row-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink-primary);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      transition: color 0.15s ease;
+    }
+
+    .journal-row-date {
+      font-size: 12px;
+      color: var(--ink-muted);
+      margin-top: 2px;
+    }
+
+    .journal-row-amount {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--green);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ==========================================================================
+       7. 详情页 (Detail View)
+       ========================================================================== */
+    .detail-topbar {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .detail-topbar h2 {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--ink-primary);
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .detail-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .detail-visual-box {
+      background: #FFFFFF;
+      border: 1.5px solid var(--border-line);
+      border-radius: var(--radius-xl);
+      padding: 22px;
+      box-shadow: var(--shadow-sm);
+      position: sticky;
+      top: 24px;
+    }
+
+    .detail-cover-card {
+      width: 100%;
+      aspect-ratio: 16 / 11;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-line);
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,0.02);
+    }
+
+    .detail-cover-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .detail-stats-row {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 20px;
+      align-items: center;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px dashed var(--border-line);
+    }
+
+    .circle-ring {
+      position: relative;
+      width: 120px;
+      height: 120px;
+    }
+
+    .circle-ring svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .circle-track {
+      fill: none;
+      stroke: var(--bg-subtle);
+      stroke-width: 10;
+    }
+
+    .circle-progress {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 10;
+      stroke-linecap: round;
+      stroke-dasharray: 339.3;
+      stroke-dashoffset: 339.3;
+      transition: stroke-dashoffset 0.8s var(--ease);
+    }
+
+    .circle-center {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-content: center;
+      text-align: center;
+    }
+
+    .circle-center strong {
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1;
+      color: var(--ink-primary);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .circle-center span {
+      font-size: 11px;
+      color: var(--ink-muted);
+      margin-top: 4px;
+    }
+
+    .detail-key-metrics {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .metric-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--ink-muted);
+    }
+
+    .metric-row strong {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--ink-primary);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .detail-timeline-card {
+      background: #FFFFFF;
+      border: 1.5px solid var(--border-line);
+      border-radius: var(--radius-xl);
+      padding: 26px 28px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .timeline-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 22px;
+    }
+
+    .timeline-head h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--ink-primary);
+    }
+
+    .timeline-group {
+      position: relative;
+      padding-left: 28px;
+      margin-bottom: 24px;
+    }
+
+    .timeline-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .timeline-group::before {
+      content: "";
+      position: absolute;
+      top: 14px;
+      bottom: -24px;
+      left: 7px;
+      width: 1.5px;
+      background: var(--border-line);
+    }
+
+    .timeline-group:last-child::before {
+      display: none;
+    }
+
+    .timeline-date-label {
+      position: relative;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--ink-muted);
+      margin-bottom: 10px;
+    }
+
+    .timeline-date-label::before {
+      content: "";
+      position: absolute;
+      top: 4px;
+      left: -28px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 3px solid #FFF0E8;
+    }
+
+    .timeline-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 14px;
+      background: var(--bg-subtle);
+      border-radius: 14px;
+      margin-bottom: 8px;
+      border: 1px solid var(--border-line);
+    }
+
+    .timeline-item-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: var(--green-light);
+      color: var(--green);
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .timeline-item-main {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .timeline-item-note {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink-primary);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .timeline-item-time {
+      font-size: 11px;
+      color: var(--ink-muted);
+      margin-top: 2px;
+    }
+
+    .timeline-item-amount {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--green);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .timeline-delete-btn {
+      width: 26px;
+      height: 26px;
+      display: grid;
+      place-items: center;
+      border-radius: 6px;
+      color: var(--ink-light);
+      transition: all 0.15s ease;
+    }
+
+    .timeline-delete-btn:hover {
+      background: #FFEBE8;
+      color: #D34B38;
+    }
+
+    /* 悬浮存钱按钮 (FAB) */
+    .fab-btn {
+      position: fixed;
+      right: max(24px, calc((100vw - 1160px) / 2 + 28px));
+      bottom: 32px;
+      z-index: 10;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 22px;
+      background: var(--accent);
+      color: #FFFFFF;
+      font-size: 15px;
+      font-weight: 700;
+      border-radius: 20px;
+      box-shadow: 0 10px 26px rgba(230, 100, 59, 0.35);
+      transition: all 0.2s var(--ease);
+    }
+
+    .fab-btn:hover {
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 14px 32px rgba(230, 100, 59, 0.42);
+    }
+
+    /* ==========================================================================
+       8. 空状态展示 (Empty States)
+       ========================================================================== */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 56px 24px;
+      background: #FFFFFF;
+      border: 1.5px dashed var(--border-dark);
+      border-radius: var(--radius-xl);
+      margin: 16px 0;
+    }
+
+    .empty-state-img {
+      width: 180px;
+      height: 135px;
+      margin-bottom: 20px;
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--bg-subtle);
+    }
+
+    .empty-state-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .empty-state h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--ink-primary);
+      margin-bottom: 6px;
+    }
+
+    .empty-state p {
+      font-size: 13px;
+      color: var(--ink-muted);
+      max-width: 360px;
+      margin-bottom: 20px;
+    }
+
+    /* 归档折叠条 */
+    .archive-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      background: #FFFFFF;
+      border: 1px solid var(--border-line);
+      border-radius: var(--radius-md);
+      margin-top: 24px;
+      margin-bottom: 16px;
+    }
+
+    .archive-bar strong {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--ink-primary);
+    }
+
+    .archive-bar span {
+      font-size: 12px;
+      color: var(--ink-muted);
+      margin-left: 8px;
+    }
+
+    /* ==========================================================================
+       9. 趋势图与洞察页 (Insights Page)
+       ========================================================================== */
+    .chart-panel {
+      background: #FFFFFF;
+      border: 1.5px solid var(--border-line);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+      margin-top: 20px;
+    }
+
+    .chart-panel h3 {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--ink-primary);
+      margin-bottom: 16px;
+    }
+
+    .bar-chart-container {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      align-items: flex-end;
+      gap: 12px;
+      height: 140px;
+      padding-top: 20px;
+      border-bottom: 1px solid var(--border-line);
+    }
+
+    .bar-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100%;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .bar-track {
+      width: 100%;
+      max-width: 38px;
+      height: 100%;
+      background: var(--bg-subtle);
+      border-radius: 8px 8px 3px 3px;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      width: 100%;
+      min-height: 4px;
+      border-radius: 8px 8px 2px 2px;
+      background: linear-gradient(180deg, #F8855E, #E6643B);
+      transition: height 0.6s var(--ease);
+    }
+
+    .bar-label {
+      font-size: 11px;
+      color: var(--ink-muted);
+      font-weight: 500;
+    }
+
+    /* ==========================================================================
+       10. 底部导航栏 (Mobile / Floating Bottom Nav)
+       ========================================================================== */
+    .bottom-nav {
+      position: fixed;
+      right: 50%;
+      bottom: calc(16px + env(safe-area-inset-bottom));
+      transform: translateX(50%);
+      z-index: 30;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      align-items: center;
+      width: min(520px, calc(100vw - 32px));
+      height: 68px;
+      padding: 6px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.94);
+      border: 1.5px solid #FFFFFF;
+      box-shadow: 0 16px 36px rgba(78, 52, 34, 0.12), 0 2px 8px rgba(78, 52, 34, 0.04);
+      backdrop-filter: blur(16px);
+      overflow: hidden;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .bottom-nav-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      height: 52px;
+      border-radius: 16px;
+      color: var(--ink-muted);
+      font-size: 11px;
+      font-weight: 600;
+      transition: all 0.2s var(--ease);
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      outline: none;
+    }
+
+    .bottom-nav-btn svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .bottom-nav-btn:hover {
+      color: var(--ink-primary);
+    }
+
+    .bottom-nav-btn:active {
+      transform: scale(0.94);
+      background: var(--accent-light);
+      border-radius: 16px;
+    }
+
+    .bottom-nav-btn.active {
+      color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .bottom-nav-btn:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--accent-border);
+    }
+
+    .bottom-nav-center-add {
+      width: 48px;
+      height: 48px;
+      justify-self: center;
+      border-radius: 16px;
+      background: var(--accent);
+      color: #FFFFFF;
+      display: grid;
+      place-items: center;
+      box-shadow: 0 6px 16px rgba(230, 100, 59, 0.35);
+      transition: transform 0.2s var(--ease);
+    }
+
+    .bottom-nav-center-add:hover {
+      transform: scale(1.06);
+    }
+
+    .bottom-nav-center-add svg {
+      width: 24px;
+      height: 24px;
+      stroke: #FFFFFF;
+      stroke-width: 2.5;
+    }
+
+    /* ==========================================================================
+       11. 弹窗与心愿预置封面库 (Modals & Preset Cover Gallery)
+       ========================================================================== */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(38, 30, 26, 0.45);
+      backdrop-filter: blur(6px);
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+      animation: modalFade 0.2s ease;
+    }
+
+    .modal-dialog {
+      width: min(100%, 500px);
+      max-height: calc(100vh - 40px);
+      overflow-y: auto;
+      background: #FFFFFF;
+      border-radius: var(--radius-xl);
+      padding: 28px;
+      box-shadow: 0 24px 60px rgba(58, 38, 26, 0.22);
+      border: 1px solid var(--border-line);
+      animation: modalSlideUp 0.25s var(--ease);
+    }
+
+    @keyframes modalFade { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes modalSlideUp { from { opacity: 0; transform: translateY(20px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+    .modal-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .modal-header h3 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--ink-primary);
+    }
+
+    .modal-header p {
+      font-size: 13px;
+      color: var(--ink-muted);
+      margin-top: 3px;
+    }
+
+    .modal-close-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      background: var(--bg-subtle);
+      color: var(--ink-secondary);
+      font-size: 18px;
+    }
+
+    .modal-close-btn:hover {
+      background: #EAE2D9;
+      color: var(--ink-primary);
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink-secondary);
+      margin-bottom: 8px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border-line);
+      border-radius: 12px;
+      background: #FAF8F5;
+      color: var(--ink-primary);
+      transition: all 0.2s ease;
+    }
+
+    .form-input:focus {
+      border-color: var(--accent);
+      background: #FFFFFF;
+      box-shadow: 0 0 0 4px rgba(230, 100, 59, 0.12);
+    }
+
+    /* 精选心愿封面点选画廊与分类Tab */
+    .gallery-filter-tabs {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 12px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: none;
+    }
+    .gallery-filter-tabs::-webkit-scrollbar { display: none; }
+    .gallery-tab-btn {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--ink-secondary);
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-line);
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .gallery-tab-btn:hover {
+      background: #ECE5DE;
+      color: var(--ink-primary);
+    }
+    .gallery-tab-btn.active {
+      background: var(--accent);
+      color: #FFFFFF;
+      border-color: var(--accent);
+      box-shadow: 0 2px 8px rgba(230, 100, 59, 0.28);
+    }
+
+    .preset-gallery {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+      max-height: 240px;
+      overflow-y: auto;
+      padding: 2px 2px 6px 2px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border-dark) transparent;
+    }
+
+    .preset-item {
+      position: relative;
+      aspect-ratio: 4 / 3;
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      border: 2px solid var(--border-line);
+      background: var(--bg-subtle);
+      transition: all 0.2s ease;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .preset-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.25s ease;
+    }
+
+    .preset-item:hover img {
+      transform: scale(1.05);
+    }
+
+    .preset-item.selected {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(230, 100, 59, 0.3);
+    }
+
+    .preset-item.selected::after {
+      content: "✓";
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #FFFFFF;
+      font-size: 11px;
+      font-weight: 700;
+      display: grid;
+      place-items: center;
+    }
+
+    .preset-tag-label {
+      position: absolute;
+      bottom: 0;
+      inset-inline: 0;
+      background: rgba(44, 38, 35, 0.65);
+      color: #FFFFFF;
+      font-size: 10px;
+      text-align: center;
+      padding: 2px 0;
+      backdrop-filter: blur(2px);
+    }
+
+    /* 自定义上传区域 */
+    .custom-upload-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 14px;
+      border: 1.5px dashed var(--border-dark);
+      border-radius: 12px;
+      background: #FAF8F5;
+    }
+
+    .custom-upload-box span {
+      font-size: 12px;
+      color: var(--ink-muted);
+    }
+
+    .upload-link-btn {
+      padding: 6px 12px;
+      border-radius: 8px;
+      background: #FFFFFF;
+      border: 1px solid var(--border-line);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink-secondary);
+      cursor: pointer;
+    }
+
+    .upload-link-btn:hover {
+      background: var(--bg-subtle);
+    }
+
+    .modal-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-line);
+    }
+
+    .form-error {
+      color: #D34B38;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    /* 轻量 Toast 提示 */
+    .toast-box {
+      position: fixed;
+      left: 50%;
+      bottom: calc(96px + env(safe-area-inset-bottom));
+      transform: translateX(-50%) translateY(20px);
+      z-index: 60;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      background: rgba(44, 38, 35, 0.92);
+      color: #FFFFFF;
+      font-size: 13px;
+      font-weight: 500;
+      border-radius: 30px;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15);
+      backdrop-filter: blur(8px);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.25s var(--ease);
+    }
+
+    .toast-box.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .toast-box.error {
+      background: rgba(211, 75, 56, 0.95);
+    }
+
+    #celebrateCanvas {
+      position: fixed;
+      inset: 0;
+      z-index: 70;
+      pointer-events: none;
+    }
+
+    /* ==========================================================================
+       12. 响应式布局 (Responsive)
+       ========================================================================== */
+    @media (max-width: 860px) {
+      .hero-banner {
+        grid-template-columns: 1fr;
+        padding: 24px;
+      }
+      .hero-illustration {
+        display: none;
+      }
+      .stat-cards-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      .detail-layout {
+        grid-template-columns: 1fr;
+      }
+      .detail-visual-box {
+        position: static;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .app-shell {
+        padding: 16px 16px 110px;
+      }
+      .desktop-nav {
+        display: none;
+      }
+      .topbar {
+        margin-bottom: 20px;
+      }
+      .page-head h2 {
+        font-size: 24px;
+      }
+      .tips-grid {
+        grid-template-columns: 1fr;
+      }
+      .bottom-nav {
+        width: calc(100vw - 24px);
+      }
+      .preset-gallery {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .modal-dialog {
+        padding: 22px 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app-shell">
+    <!-- 顶部导航栏 -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-avatar">
+          <img src="assets/mascot-piggy.jpg" alt="小猪存钱吉祥物" />
+        </div>
+        <div class="brand-text">
+          <h1>小猪存钱</h1>
+          <p>把每个心愿，存成触手可及的生活</p>
+        </div>
+      </div>
+      <div class="top-actions">
+        <nav class="desktop-nav" aria-label="页面切换">
+          <button data-route="home" class="active">总览</button>
+          <button data-route="goals">心愿目标</button>
+          <button data-route="records">存钱明细</button>
+          <button data-route="insights">洞察分析</button>
+        </nav>
+        <button class="primary-btn" id="newGoalTop">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          新建心愿
+        </button>
+      </div>
+    </header>
+
+    <!-- 1. 总览页 (Home View) -->
+    <section id="homeView" class="view active">
+      <div class="hero-banner">
+        <div class="hero-content">
+          <div class="welcome-kicker">WISH & SAVING JOURNAL</div>
+          <h2>慢慢攒，<br />心愿总会一件件实现。</h2>
+          <p>把大大的渴望拆解成每天微小的坚持。今天省下一杯奶茶、少点一次外卖，存钱罐里的金币就又多了一枚。</p>
+          <div class="hero-quick-row">
+            <span class="hero-badge-tag">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              存钱不必焦虑，贵在持续
+            </span>
+          </div>
+        </div>
+        <div class="hero-illustration">
+          <img src="assets/mascot-piggy.jpg" alt="存钱罐手绘主图" />
+        </div>
+      </div>
+
+      <div class="section-head">
+        <div>
+          <h3>我的存钱心愿</h3>
+        </div>
+        <span class="sub" id="goalCountLabel">0 个进行中</span>
+      </div>
+
+      <!-- 目标卡片列表 -->
+      <div id="goalGrid" class="goal-grid"></div>
+
+      <!-- 空状态 -->
+      <div id="emptyState" class="empty-state" hidden>
+        <div class="empty-state-img">
+          <img src="assets/empty-dream.svg" alt="等待开启心愿" />
+        </div>
+        <h3 id="emptyStateTitle">还没有存钱目标</h3>
+        <p id="emptyStateText">给生活定一个小小的期许吧，无论是心仪的数码好物，还是一场向往已久的旅行。</p>
+        <button class="primary-btn" id="emptyCreate">＋ 开启第一个心愿</button>
+      </div>
+
+      <!-- 归档区域 -->
+      <div id="archiveBox" class="archive-bar" hidden>
+        <div>
+          <strong>已归档目标</strong>
+          <span id="archiveCount">0 个目标</span>
+        </div>
+        <button class="ghost-btn" id="toggleArchived">查看归档</button>
+      </div>
+      <div id="archivedGrid" class="goal-grid" hidden></div>
+
+      <!-- 数据汇总三张手账卡片 -->
+      <div class="stat-cards-grid">
+        <div class="stat-card warm">
+          <div class="stat-card-label">
+            <span>全部目标已攒下</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <div class="stat-card-num" id="totalSaved">¥0</div>
+          <div class="stat-card-desc" id="totalSavedSub">从第一笔积累开始</div>
+        </div>
+        <div class="stat-card green">
+          <div class="stat-card-label">
+            <span>进行中心愿</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          </div>
+          <div class="stat-card-num" id="activeCount">0</div>
+          <div class="stat-card-desc">个正在靠近的梦想</div>
+        </div>
+        <div class="stat-card purple">
+          <div class="stat-card-label">
+            <span>累计存入笔数</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+          </div>
+          <div class="stat-card-num" id="recordCount">0</div>
+          <div class="stat-card-desc">笔认真对待的记录</div>
+        </div>
+      </div>
+
+      <!-- 生活小贴士 -->
+      <div class="tips-grid">
+        <div class="tip-card">
+          <div class="tip-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          </div>
+          <div class="tip-body">
+            <h4>给每一笔存钱起个名字</h4>
+            <p>例如“少喝一杯奶茶”、“加班奖励”，赋予存钱更多情感价值。</p>
+          </div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-icon blue">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M16 12l-4-4-4 4M12 16V8"/></svg>
+          </div>
+          <div class="tip-body">
+            <h4>建立专属存钱节奏</h4>
+            <p id="rhythmText">记录越多，存钱节奏与完成预估就越清晰。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 最近存钱动态 -->
+      <div class="recent-records-card">
+        <div class="section-head">
+          <h3>最近存钱</h3>
+          <span class="sub" id="recentHint">最新的努力</span>
+        </div>
+        <div id="recentActivity" class="journal-list"></div>
+      </div>
+    </section>
+
+    <!-- 2. 目标页 (Goals View) -->
+    <section id="goalsView" class="view">
+      <div class="page-head">
+        <div>
+          <div class="welcome-kicker">SAVING GOALS</div>
+          <h2>所有心愿目标</h2>
+          <p>看得到的前进，就是最好的动力。</p>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <span class="filter-pill" id="goalsPageCount">0 个进行中</span>
+          <button class="primary-btn" id="newGoalPage">＋ 新建心愿</button>
+        </div>
+      </div>
+      <div id="goalGridPage" class="goal-grid"></div>
+      <div id="emptyGoalsPage" class="empty-state" hidden>
+        <div class="empty-state-img">
+          <img src="assets/empty-dream.svg" alt="还没有心愿目标" />
+        </div>
+        <h3 id="emptyGoalsTitle">还没有心愿目标</h3>
+        <p id="emptyGoalsText">创建一个心愿，开始让生活变得期待满满。</p>
+        <button class="primary-btn" id="emptyGoalsCreate">＋ 新建心愿</button>
+      </div>
+      <div id="archiveBoxPage" class="archive-bar" hidden>
+        <div>
+          <strong>已归档目标</strong>
+          <span id="archiveCountPage">0 个目标</span>
+        </div>
+        <button class="ghost-btn" id="toggleArchivedPage">查看归档</button>
+      </div>
+      <div id="archivedGridPage" class="goal-grid" hidden></div>
+    </section>
+
+    <!-- 3. 明细记录页 (Records View) -->
+    <section id="recordsView" class="view">
+      <div class="page-head">
+        <div>
+          <div class="welcome-kicker">SAVING LOGS</div>
+          <h2>存钱日记明细</h2>
+          <p>每一次存入，都是为自己喜欢的生活投上一票。</p>
+        </div>
+        <span class="filter-pill" id="recordsPageCount">0 笔记录</span>
+      </div>
+      <div class="recent-records-card">
+        <div id="allRecords" class="journal-list"></div>
+      </div>
+    </section>
+
+    <!-- 4. 洞察页 (Insights View) -->
+    <section id="insightsView" class="view">
+      <div class="page-head">
+        <div>
+          <div class="welcome-kicker">SAVING INSIGHTS</div>
+          <h2>存钱节奏与洞察</h2>
+          <p>看见数字背后的耐心与生活规律。</p>
+        </div>
+      </div>
+      <div class="stat-cards-grid" style="margin-top:0;">
+        <div class="stat-card warm">
+          <div class="stat-card-label"><span>本月存入</span></div>
+          <div class="stat-card-num" id="monthSavedPage">¥0</div>
+          <div class="stat-card-desc" id="monthSavedSub">这个月的努力正在累积</div>
+        </div>
+        <div class="stat-card green">
+          <div class="stat-card-label"><span>日均存钱</span></div>
+          <div class="stat-card-num" id="dailySavedPage">—</div>
+          <div class="stat-card-desc">基于已有存钱记录计算</div>
+        </div>
+        <div class="stat-card purple">
+          <div class="stat-card-label"><span>心愿达成率</span></div>
+          <div class="stat-card-num" id="completionRatePage">0%</div>
+          <div class="stat-card-desc">所有心愿的综合进度</div>
+        </div>
+      </div>
+
+      <div class="chart-panel">
+        <h3>近 7 天存钱趋势</h3>
+        <div id="weeklyChart" class="bar-chart-container"></div>
+      </div>
+    </section>
+
+    <!-- 5. 目标详情页 (Detail View) -->
+    <section id="detailView" class="view">
+      <div class="detail-topbar">
+        <button class="icon-btn" id="backHome" aria-label="返回总览">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </button>
+        <h2 id="detailTitle">目标详情</h2>
+        <span class="filter-pill" id="detailTag">进行中</span>
+      </div>
+
+      <div class="detail-layout">
+        <!-- 左侧视觉与核心进度卡片 -->
+        <div class="detail-visual-box">
+          <div class="detail-cover-card" id="detailImage"></div>
+          <div class="detail-stats-row">
+            <div class="circle-ring">
+              <svg viewBox="0 0 120 120">
+                <circle class="circle-track" cx="60" cy="60" r="54"></circle>
+                <circle id="ringProgress" class="circle-progress" cx="60" cy="60" r="54"></circle>
+              </svg>
+              <div class="circle-center">
+                <strong id="detailPercent">0%</strong>
+                <span>已完成</span>
+              </div>
+            </div>
+            <div class="detail-key-metrics">
+              <div class="metric-row">
+                <span>已经攒下</span>
+                <strong id="detailSaved">¥0</strong>
+              </div>
+              <div class="metric-row">
+                <span>目标金额</span>
+                <strong id="detailTarget">¥0</strong>
+              </div>
+              <div class="metric-row">
+                <span>日均存钱</span>
+                <strong id="detailAverage">—</strong>
+              </div>
+              <div class="metric-row">
+                <span>预计达成</span>
+                <strong id="detailEta">开始记录吧</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 右侧存钱时间线明细 -->
+        <div class="detail-timeline-card">
+          <div class="timeline-head">
+            <h3>存钱足迹</h3>
+            <span class="sub" id="detailRecordCount">0 笔记录</span>
+          </div>
+          <div id="timeline"></div>
+        </div>
+      </div>
+
+      <!-- 存入一笔悬浮按钮 -->
+      <button class="fab-btn" id="addSaving">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        存入一笔
+      </button>
+    </section>
+  </main>
+
+  <!-- 底部固定导航栏 -->
+  <nav class="bottom-nav" aria-label="移动端底部导航">
+    <button class="bottom-nav-btn active" data-route="home">
+      <svg viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+      <span>总览</span>
+    </button>
+    <button class="bottom-nav-btn" data-route="goals">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3"></circle></svg>
+      <span>心愿</span>
+    </button>
+    <button class="bottom-nav-center-add" id="navAddGoal" aria-label="新建目标">
+      <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+    </button>
+    <button class="bottom-nav-btn" data-route="records">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+      <span>明细</span>
+    </button>
+    <button class="bottom-nav-btn" data-route="insights">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+      <span>洞察</span>
+    </button>
+  </nav>
+
+  <!-- 弹窗 1：创建心愿目标（带有心愿封面画廊点选功能） -->
+  <div id="goalModal" class="modal-backdrop" aria-hidden="true">
+    <div class="modal-dialog" role="dialog" aria-modal="true">
+      <div class="modal-header">
+        <div>
+          <h3>创建存钱心愿</h3>
+          <p>为想要的好生活，认真许下一个目标</p>
+        </div>
+        <button class="modal-close-btn" data-close="goalModal">×</button>
+      </div>
+      <form id="goalForm">
+        <div class="form-group">
+          <label for="goalName">心愿名称</label>
+          <input id="goalName" class="form-input" maxlength="30" placeholder="例如：Switch 游戏机、海岛度假" required />
+        </div>
+        <div class="form-group">
+          <label for="goalTarget">目标金额 (元)</label>
+          <input id="goalTarget" class="form-input" type="number" min="1" step="0.01" placeholder="例如：2999" required />
+        </div>
+        <div class="form-group">
+          <label>精选心愿插画封面（点击直接选用，支持分类筛选）</label>
+          <div class="gallery-filter-tabs" id="galleryFilterTabs">
+            <button type="button" class="gallery-tab-btn active" data-cat="all">全部心愿</button>
+            <button type="button" class="gallery-tab-btn" data-cat="travel">🚗 出行远方</button>
+            <button type="button" class="gallery-tab-btn" data-cat="home">🏡 理想安居</button>
+            <button type="button" class="gallery-tab-btn" data-cat="digital">💻 科技数码</button>
+            <button type="button" class="gallery-tab-btn" data-cat="dream">✨ 生活梦想</button>
+          </div>
+          <div class="preset-gallery" id="presetGallery"></div>
+
+          <div class="custom-upload-box">
+            <span>或者使用本地图片：</span>
+            <label class="upload-link-btn" for="goalImageInput">选择本地文件</label>
+            <input id="goalImageInput" type="file" accept="image/*" hidden />
+          </div>
+        </div>
+        <div class="form-error" id="goalError"></div>
+        <div class="modal-actions">
+          <button type="button" class="ghost-btn" data-close="goalModal">取消</button>
+          <button class="primary-btn" type="submit">保存心愿</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 弹窗 2：存入一笔 -->
+  <div id="savingModal" class="modal-backdrop" aria-hidden="true">
+    <div class="modal-dialog" role="dialog" aria-modal="true">
+      <div class="modal-header">
+        <div>
+          <h3>存入一笔</h3>
+          <p id="savingModalSub">今天的小小进步</p>
+        </div>
+        <button class="modal-close-btn" data-close="savingModal">×</button>
+      </div>
+      <form id="savingForm">
+        <div class="form-group">
+          <label for="savingAmount">存入金额 (元)</label>
+          <input id="savingAmount" class="form-input" type="number" min="0.01" step="0.01" placeholder="0.00" required autofocus />
+        </div>
+        <div class="form-group">
+          <label for="savingNote">心愿备注（选填）</label>
+          <input id="savingNote" class="form-input" maxlength="60" placeholder="例如：少喝一杯奶茶、今天兼职收入" />
+        </div>
+        <div class="form-group">
+          <label for="savingDate">存入日期</label>
+          <input id="savingDate" class="form-input" type="date" required />
+        </div>
+        <div class="form-error" id="savingError"></div>
+        <div class="modal-actions">
+          <button type="button" class="ghost-btn" data-close="savingModal">取消</button>
+          <button class="primary-btn" type="submit">存入并记录</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 轻量 Toast 提示 -->
+  <div id="toast" class="toast-box" role="status" aria-live="polite">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    <span id="toastMessage"></span>
+  </div>
+
+  <!-- 礼花庆祝 Canvas -->
+  <canvas id="celebrateCanvas"></canvas>
+
+  <!-- ==========================================================================
+       13. 核心应用逻辑 (DRY Clean Javascript)
+       ========================================================================== -->
+  <script>
+    const STORAGE_KEY = 'xiaozhu-saving-goals-v1';
+
+    // 16+ 组精选生活心愿画廊项目
+    const PRESET_ITEMS = [
+      { id: 'car', name: '买一辆属于自己的车 · 智能轿跑', category: 'travel', src: 'assets/goal-car.jpg', target: 180000, tag: '智能轿跑' },
+      { id: 'switch', name: 'Switch 2 掌上游戏机', category: 'digital', src: 'assets/goal-switch.jpg', target: 2999, tag: 'Switch' },
+      { id: 'travel', name: '夏天去看海 · 度假旅行', category: 'travel', src: 'assets/goal-travel.jpg', target: 4500, tag: '海岛度假' },
+      { id: 'house', name: '属于自己的温馨小家', category: 'home', src: 'assets/goal-house.jpg', target: 300000, tag: '温馨小家' },
+      { id: 'camera', name: '富士复古微单相机', category: 'digital', src: 'assets/goal-camera.svg', target: 6800, tag: '生活微单' },
+      { id: 'cat', name: '猫咪成长与宠物基金', category: 'home', src: 'assets/goal-cat.svg', target: 3000, tag: '猫咪基金' },
+      { id: 'coffee', name: '意式复古咖啡角', category: 'home', src: 'assets/goal-coffee.jpg', target: 4500, tag: '复古咖啡' },
+      { id: 'van', name: '山系复古露营车', category: 'travel', src: 'assets/goal-van.jpg', target: 150000, tag: '露营车' },
+      { id: 'moto', name: '复古巡航机车', category: 'travel', src: 'assets/goal-moto.jpg', target: 35000, tag: '复古机车' },
+      { id: 'bike', name: '轻量公路单车', category: 'travel', src: 'assets/goal-bike.jpg', target: 8000, tag: '公路单车' },
+      { id: 'sofa', name: '客厅云朵沙发与落地灯', category: 'home', src: 'assets/goal-sofa.jpg', target: 6800, tag: '云朵沙发' },
+      { id: 'garden', name: '阳光房绿植小花园', category: 'home', src: 'assets/goal-garden.jpg', target: 2500, tag: '阳台花园' },
+      { id: 'laptop', name: 'MacBook 生产力超极本', category: 'digital', src: 'assets/goal-laptop.jpg', target: 11999, tag: 'MacBook' },
+      { id: 'music', name: '降噪头戴耳机与黑胶机', category: 'digital', src: 'assets/goal-music.jpg', target: 2600, tag: '黑胶唱机' },
+      { id: 'drone', name: '航拍便携无人机', category: 'digital', src: 'assets/goal-drone.jpg', target: 4999, tag: '航拍无人机' },
+      { id: 'wedding', name: '海岛草坪浪漫婚礼', category: 'dream', src: 'assets/goal-wedding.jpg', target: 50000, tag: '浪漫婚礼' },
+      { id: 'guitar', name: '原木民谣吉他', category: 'dream', src: 'assets/goal-guitar.jpg', target: 3200, tag: '民谣吉他' },
+      { id: 'ski', name: '冬季粉雪滑雪季', category: 'dream', src: 'assets/goal-ski.jpg', target: 4200, tag: '滑雪度假' },
+      { id: 'study', name: '深造与留学基金', category: 'dream', src: 'assets/goal-study.jpg', target: 60000, tag: '毕业深造' }
+    ];
+
+    // 默认高质感心愿种子数据（若初次访问或无数据时优雅注入）
+    const DEFAULT_GOALS = [
+      {
+        id: 'preset-car-dream',
+        name: '买一辆属于自己的车 · 智能轿跑',
+        target: 180000,
+        image: 'assets/goal-car.jpg',
+        archived: false,
+        createdAt: Date.now() - 86400000 * 30,
+        records: [
+          { id: 'rec-c1', amount: 20000, note: '首笔购车专属基金', date: getPastDate(30), createdAt: Date.now() - 86400000 * 30 },
+          { id: 'rec-c2', amount: 16000, note: '本月奖金存入', date: getPastDate(8), createdAt: Date.now() - 86400000 * 8 }
+        ]
+      },
+      {
+        id: 'preset-house-dream',
+        name: '属于自己的温馨小家 · 安居基金',
+        target: 300000,
+        image: 'assets/goal-house.jpg',
+        archived: false,
+        createdAt: Date.now() - 86400000 * 45,
+        records: [
+          { id: 'rec-h1', amount: 35000, note: '购房安居起步基金', date: getPastDate(45), createdAt: Date.now() - 86400000 * 45 },
+          { id: 'rec-h2', amount: 17000, note: '半年结余专款存入', date: getPastDate(15), createdAt: Date.now() - 86400000 * 15 }
+        ]
+      },
+      {
+        id: 'preset-switch-2',
+        name: 'Switch 2 游戏机',
+        target: 2999,
+        image: 'assets/goal-switch.jpg',
+        archived: false,
+        createdAt: Date.now() - 86400000 * 12,
+        records: [
+          { id: 'rec-1', amount: 800, note: '启动梦想基金', date: getPastDate(12), createdAt: Date.now() - 86400000 * 12 },
+          { id: 'rec-2', amount: 450, note: '周末兼职结算', date: getPastDate(7), createdAt: Date.now() - 86400000 * 7 },
+          { id: 'rec-3', amount: 600, note: '少喝奶茶和外卖省下的', date: getPastDate(2), createdAt: Date.now() - 86400000 * 2 }
+        ]
+      },
+      {
+        id: 'preset-travel-beach',
+        name: '夏天去看海 · 度假旅行',
+        target: 4500,
+        image: 'assets/goal-travel.jpg',
+        archived: false,
+        createdAt: Date.now() - 86400000 * 18,
+        records: [
+          { id: 'rec-4', amount: 1200, note: '年终小奖金', date: getPastDate(18), createdAt: Date.now() - 86400000 * 18 },
+          { id: 'rec-5', amount: 900, note: '每月旅行专项储蓄', date: getPastDate(5), createdAt: Date.now() - 86400000 * 5 }
+        ]
+      },
+      {
+        id: 'preset-camera-retro',
+        name: '富士复古微单相机',
+        target: 6800,
+        image: 'assets/goal-camera.svg',
+        archived: false,
+        createdAt: Date.now() - 86400000 * 25,
+        records: [
+          { id: 'rec-6', amount: 2000, note: '立项第一笔', date: getPastDate(25), createdAt: Date.now() - 86400000 * 25 },
+          { id: 'rec-7', amount: 1200, note: '摄影爱好激励', date: getPastDate(10), createdAt: Date.now() - 86400000 * 10 }
+        ]
+      }
+    ];
+
+    function getPastDate(daysAgo) {
+      const d = new Date();
+      d.setDate(d.getDate() - daysAgo);
+      return d.toISOString().slice(0, 10);
+    }
+
+    const state = {
+      goals: [],
+      currentGoalId: null,
+      selectedCover: 'assets/goal-car.jpg',
+      showArchived: false
+    };
+
+    const $ = id => document.getElementById(id);
+    const money = n => `¥${Number(n || 0).toLocaleString('zh-CN', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}`;
+    const today = () => new Date().toISOString().slice(0, 10);
+    const formatDate = d => {
+      const x = new Date(`${d}T12:00:00`);
+      return `${x.getMonth() + 1}月${x.getDate()}日`;
+    };
+    const uid = () => `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+    const escapeHtml = str => String(str).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+
+    // Toast 提示
+    let toastTimer;
+    function showToast(message, type = 'success') {
+      const toast = $('toast');
+      $('toastMessage').textContent = message;
+      toast.classList.toggle('error', type === 'error');
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 2400);
+    }
+
+    // 数据存取与初始化
+    function load() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          state.goals = JSON.parse(raw);
+          // 确保新加入的淡紫色智能轿跑能展示在列表中
+          if (!state.goals.some(g => g.image === 'assets/goal-car.jpg' || g.name.includes('车'))) {
+            state.goals.unshift(DEFAULT_GOALS[0]);
+            save();
+          }
+          // 确保新加入的温馨小家也能展示在列表中
+          if (!state.goals.some(g => g.image === 'assets/goal-house.jpg' || g.name.includes('家') || g.name.includes('房'))) {
+            state.goals.splice(1, 0, DEFAULT_GOALS[1]);
+            save();
+          }
+        } else {
+          state.goals = DEFAULT_GOALS;
+          save();
+        }
+      } catch {
+        state.goals = DEFAULT_GOALS;
+      }
+      state.goals.forEach(g => {
+        g.records ||= [];
+        g.archived ||= false;
+      });
+    }
+
+    function save() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state.goals));
+    }
+
+    // 计算单个目标的统计数据
+    function goalStats(goal) {
+      const records = goal.records || [];
+      const saved = records.reduce((s, r) => s + Number(r.amount), 0);
+      const pct = goal.target ? Math.min(100, (saved / goal.target) * 100) : 0;
+      let avg = 0;
+      let eta = '开始记录吧';
+
+      if (records.length > 1) {
+        const times = records.map(r => new Date(`${r.date}T12:00:00`).getTime());
+        const days = Math.max(1, (Math.max(...times) - Math.min(...times)) / 86400000 + 1);
+        avg = saved / days;
+      } else if (records.length === 1) {
+        eta = '期待更多记录';
+      }
+
+      if (avg && saved < goal.target) {
+        const daysLeft = Math.ceil((goal.target - saved) / avg);
+        eta = daysLeft < 7 ? `约 ${daysLeft} 天` : daysLeft < 30 ? `约 ${Math.ceil(daysLeft / 7)} 周` : `约 ${Math.ceil(daysLeft / 30)} 个月`;
+      }
+
+      if (saved >= goal.target) {
+        eta = '已达成 🎉';
+      }
+
+      return { saved, pct, avg, eta };
+    }
+
+    // 图片渲染辅助
+    function imageMarkup(src) {
+      const safeSrc = src || 'assets/mascot-piggy.jpg';
+      return `<img src="${safeSrc}" alt="" loading="lazy" />`;
+    }
+
+    // 核心卡片构建函数 (遵循 DRY 原则，消除原代码的重复卡片结构)
+    function createGoalCardElement(goal, isArchived = false) {
+      const s = goalStats(goal);
+      const card = document.createElement('article');
+      card.className = `goal-card ${isArchived ? 'archived-card' : ''}`;
+      card.dataset.id = goal.id;
+
+      card.innerHTML = `
+        <div class="goal-card-cover">
+          ${imageMarkup(goal.image)}
+          <span class="goal-badge ${s.saved >= goal.target ? 'done' : ''}">
+            ${s.saved >= goal.target ? '已达成 🎉' : isArchived ? '已归档' : '进行中'}
+          </span>
+        </div>
+        <div class="goal-card-body">
+          <div class="goal-title-row">
+            <h4 class="goal-card-title">${escapeHtml(goal.name)}</h4>
+            <div class="goal-menu">
+              <button class="goal-menu-btn" aria-label="更多操作" data-action="toggleMenu">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1.5"></circle><circle cx="19" cy="12" r="1.5"></circle><circle cx="5" cy="12" r="1.5"></circle></svg>
+              </button>
+              <div class="dropdown-menu">
+                <button data-action="toggleArchive">${isArchived ? '恢复心愿' : '归档心愿'}</button>
+                <button class="danger" data-action="delete">删除心愿</button>
+              </div>
+            </div>
+          </div>
+          <div class="goal-progress-box">
+            <div class="goal-amounts">
+              <span class="saved">${money(s.saved)}</span>
+              <span class="target">目标 ${money(goal.target)}</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-bar" style="width: ${s.pct}%"></div>
+            </div>
+          </div>
+          <div class="goal-card-footer">
+            <span>${goal.records.length ? `${goal.records.length} 笔存钱记录` : '还没有记录'}</span>
+            <span class="goal-percent-text">${Math.round(s.pct)}%</span>
+          </div>
+        </div>
+      `;
+
+      // 绑定卡片交互
+      card.addEventListener('click', e => {
+        if (!e.target.closest('.goal-menu')) {
+          openDetail(goal.id);
+        }
+      });
+
+      const menuBtn = card.querySelector('[data-action="toggleMenu"]');
+      const menu = card.querySelector('.dropdown-menu');
+
+      menuBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        document.querySelectorAll('.dropdown-menu').forEach(m => {
+          if (m !== menu) m.classList.remove('open');
+        });
+        menu.classList.toggle('open');
+      });
+
+      card.querySelector('[data-action="toggleArchive"]').addEventListener('click', e => {
+        e.stopPropagation();
+        goal.archived = !goal.archived;
+        save();
+        renderAllViews();
+        showToast(goal.archived ? `已归档「${goal.name}」` : `已恢复「${goal.name}」`);
+      });
+
+      card.querySelector('[data-action="delete"]').addEventListener('click', e => {
+        e.stopPropagation();
+        if (confirm(`确定删除心愿「${goal.name}」吗？相关存钱记录也将一并移除。`)) {
+          state.goals = state.goals.filter(g => g.id !== goal.id);
+          save();
+          renderAllViews();
+          showToast(`已删除「${goal.name}」`);
+        }
+      });
+
+      return card;
+    }
+
+    // 渲染总览首页
+    function renderHome() {
+      const activeGoals = state.goals.filter(g => !g.archived);
+      const archivedGoals = state.goals.filter(g => g.archived);
+      const grid = $('goalGrid');
+      grid.innerHTML = '';
+
+      $('goalCountLabel').textContent = `${activeGoals.length} 个进行中`;
+
+      // 空状态
+      const emptyBox = $('emptyState');
+      emptyBox.hidden = activeGoals.length > 0;
+      if (activeGoals.length === 0) {
+        $('emptyStateTitle').textContent = archivedGoals.length > 0 ? '进行中的心愿已全部归档' : '还没有存钱目标';
+      }
+
+      // 卡片列表
+      activeGoals.forEach(goal => {
+        grid.appendChild(createGoalCardElement(goal, false));
+      });
+
+      // 归档区域
+      const archiveBox = $('archiveBox');
+      const archivedGrid = $('archivedGrid');
+      archiveBox.hidden = archivedGoals.length === 0;
+      $('archiveCount').textContent = `${archivedGoals.length} 个目标`;
+      archivedGrid.hidden = !state.showArchived || archivedGoals.length === 0;
+      $('toggleArchived').textContent = state.showArchived ? '收起归档' : '查看归档';
+
+      if (state.showArchived) {
+        archivedGrid.innerHTML = '';
+        archivedGoals.forEach(g => archivedGrid.appendChild(createGoalCardElement(g, true)));
+      }
+
+      // 统计指标
+      const totalSaved = state.goals.reduce((sum, g) => sum + goalStats(g).saved, 0);
+      $('totalSaved').textContent = money(totalSaved);
+      $('activeCount').textContent = activeGoals.length;
+      $('recordCount').textContent = state.goals.reduce((sum, g) => sum + (g.records || []).length, 0);
+      $('totalSavedSub').textContent = totalSaved > 0 ? '每一份付出都在闪闪发光' : '从第一笔积累开始';
+
+      const hasHistory = state.goals.some(g => (g.records || []).length > 1);
+      $('rhythmText').textContent = hasHistory ? '太棒了，你已经养成了自己的存钱节奏！' : '记录越多，存钱节奏与完成预估就越清晰。';
+
+      renderRecentList();
+    }
+
+    // 渲染最近记录
+    function renderRecentList() {
+      const allRecords = state.goals.flatMap(goal =>
+        (goal.records || []).map(record => ({ ...record, goal }))
+      ).sort((a, b) => `${b.date}${b.createdAt}`.localeCompare(`${a.date}${a.createdAt}`));
+
+      const box = $('recentActivity');
+      if (!allRecords.length) {
+        box.innerHTML = '<div style="padding: 24px; text-align: center; color: var(--ink-muted); font-size: 13px;">还没有存钱日记，存下第一笔让心愿生根发芽</div>';
+        $('recentHint').textContent = '期待第一笔';
+        return;
+      }
+
+      $('recentHint').textContent = `共 ${allRecords.length} 笔努力`;
+      box.innerHTML = allRecords.slice(0, 5).map(r => `
+        <div class="journal-row" data-goal="${r.goal.id}">
+          <div class="journal-thumb">
+            ${imageMarkup(r.goal.image)}
+          </div>
+          <div class="journal-info">
+            <p class="journal-row-title">${escapeHtml(r.note || '存入一笔')} · ${escapeHtml(r.goal.name)}</p>
+            <div class="journal-row-date">${r.date === today() ? '今天' : formatDate(r.date)}</div>
+          </div>
+          <strong class="journal-row-amount">+${money(r.amount)}</strong>
+        </div>
+      `).join('');
+
+      box.querySelectorAll('.journal-row').forEach(row => {
+        row.addEventListener('click', () => openDetail(row.dataset.goal));
+      });
+    }
+
+    // 渲染目标管理页
+    function renderGoalsPage() {
+      const active = state.goals.filter(g => !g.archived);
+      const archived = state.goals.filter(g => g.archived);
+      const grid = $('goalGridPage');
+      grid.innerHTML = '';
+
+      $('goalsPageCount').textContent = `${active.length} 个进行中`;
+      $('emptyGoalsPage').hidden = active.length > 0;
+
+      active.forEach(goal => {
+        grid.appendChild(createGoalCardElement(goal, false));
+      });
+
+      const archiveBox = $('archiveBoxPage');
+      const archivedGrid = $('archivedGridPage');
+      archiveBox.hidden = archived.length === 0;
+      $('archiveCountPage').textContent = `${archived.length} 个目标`;
+      archivedGrid.hidden = !state.showArchived || archived.length === 0;
+      $('toggleArchivedPage').textContent = state.showArchived ? '收起归档' : '查看归档';
+
+      if (state.showArchived) {
+        archivedGrid.innerHTML = '';
+        archived.forEach(g => archivedGrid.appendChild(createGoalCardElement(g, true)));
+      }
+    }
+
+    // 渲染存钱明细页
+    function renderRecordsPage() {
+      const rows = state.goals.flatMap(goal =>
+        (goal.records || []).map(record => ({ ...record, goal }))
+      ).sort((a, b) => `${b.date}${b.createdAt}`.localeCompare(`${a.date}${a.createdAt}`));
+
+      $('recordsPageCount').textContent = `${rows.length} 笔记录`;
+      const box = $('allRecords');
+
+      if (!rows.length) {
+        box.innerHTML = '<div style="padding: 40px; text-align: center; color: var(--ink-muted); font-size: 13px;">还没有任何存钱记录，进入心愿目标开始存入吧</div>';
+        return;
+      }
+
+      box.innerHTML = rows.map(r => `
+        <div class="journal-row" data-goal="${r.goal.id}">
+          <div class="journal-thumb">
+            ${imageMarkup(r.goal.image)}
+          </div>
+          <div class="journal-info">
+            <p class="journal-row-title">${escapeHtml(r.note || '存入一笔')} · ${escapeHtml(r.goal.name)}</p>
+            <div class="journal-row-date">${r.date === today() ? '今天' : formatDate(r.date)}</div>
+          </div>
+          <strong class="journal-row-amount">+${money(r.amount)}</strong>
+        </div>
+      `).join('');
+
+      box.querySelectorAll('.journal-row').forEach(row => {
+        row.addEventListener('click', () => openDetail(row.dataset.goal));
+      });
+    }
+
+    // 渲染洞察分析页
+    function renderInsightsPage() {
+      const records = state.goals.flatMap(g => g.records || []);
+      const now = new Date();
+      const currentMonthSaved = records.filter(r => {
+        const d = new Date(`${r.date}T12:00:00`);
+        return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
+      }).reduce((s, r) => s + Number(r.amount), 0);
+
+      $('monthSavedPage').textContent = money(currentMonthSaved);
+      $('monthSavedSub').textContent = currentMonthSaved > 0 ? '这个月的努力正在累积' : '这个月还没有记录';
+
+      const totalSaved = records.reduce((s, r) => s + Number(r.amount), 0);
+      let dailyAvg = '—';
+      if (records.length > 1) {
+        const minTime = Math.min(...records.map(r => new Date(`${r.date}T12:00:00`).getTime()));
+        const days = Math.max(1, Math.ceil((Date.now() - minTime) / 86400000 + 1));
+        dailyAvg = money(totalSaved / days);
+      }
+      $('dailySavedPage').textContent = dailyAvg;
+
+      const totalTarget = state.goals.filter(g => !g.archived).reduce((s, g) => s + Number(g.target || 0), 0);
+      const overallRate = totalTarget > 0 ? Math.min(100, Math.round((totalSaved / totalTarget) * 100)) : 0;
+      $('completionRatePage').textContent = `${overallRate}%`;
+
+      // 绘制近 7 天趋势条形图
+      const days = Array.from({ length: 7 }, (_, i) => {
+        const d = new Date();
+        d.setHours(12, 0, 0, 0);
+        d.setDate(d.getDate() - (6 - i));
+        const key = d.toISOString().slice(0, 10);
+        return {
+          label: `${d.getMonth() + 1}/${d.getDate()}`,
+          value: records.filter(r => r.date === key).reduce((s, r) => s + Number(r.amount), 0)
+        };
+      });
+
+      const maxVal = Math.max(1, ...days.map(d => d.value));
+      $('weeklyChart').innerHTML = days.map(d => `
+        <div class="bar-col">
+          <div class="bar-track">
+            <div class="bar-fill" style="height: ${Math.max(4, (d.value / maxVal) * 100)}%" title="¥${d.value}"></div>
+          </div>
+          <span class="bar-label">${d.label}</span>
+        </div>
+      `).join('');
+    }
+
+    // 路由切换
+    function switchRoute(route, push = true) {
+      const allowed = ['home', 'goals', 'records', 'insights'];
+      if (!allowed.includes(route)) route = 'home';
+
+      allowed.forEach(name => {
+        const view = $(`${name}View`);
+        if (view) view.classList.toggle('active', name === route);
+      });
+      $('detailView').classList.remove('active');
+
+      document.querySelectorAll('[data-route]').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.route === route);
+      });
+
+      if (route === 'home') renderHome();
+      if (route === 'goals') renderGoalsPage();
+      if (route === 'records') renderRecordsPage();
+      if (route === 'insights') renderInsightsPage();
+
+      if (push && location.hash !== `#${route}`) {
+        history.pushState({ route }, '', `#${route}`);
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function renderAllViews() {
+      renderHome();
+      renderGoalsPage();
+      renderRecordsPage();
+      renderInsightsPage();
+    }
+
+    // 目标详情页渲染
+    function openHome() {
+      state.currentGoalId = null;
+      if (location.hash === '#detail') history.back();
+      else switchRoute('home');
+    }
+
+    function openDetail(id) {
+      state.currentGoalId = id;
+      document.querySelectorAll('.view').forEach(view => view.classList.remove('active'));
+      $('detailView').classList.add('active');
+      document.querySelectorAll('[data-route]').forEach(btn => btn.classList.remove('active'));
+
+      if (location.hash !== '#detail') {
+        history.pushState({ route: 'detail', id }, '', '#detail');
+      }
+      renderDetail();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function renderDetail() {
+      const goal = state.goals.find(g => g.id === state.currentGoalId);
+      if (!goal) return openHome();
+
+      const s = goalStats(goal);
+      $('detailTitle').textContent = goal.name;
+      $('detailTag').textContent = s.saved >= goal.target ? '已达成 🎉' : goal.archived ? '已归档' : '进行中';
+      $('detailImage').innerHTML = imageMarkup(goal.image);
+      $('detailPercent').textContent = `${Math.round(s.pct)}%`;
+      $('detailSaved').textContent = money(s.saved);
+      $('detailTarget').textContent = money(goal.target);
+      $('detailAverage').textContent = s.avg ? `${money(s.avg)} / 天` : '—';
+      $('detailEta').textContent = s.eta;
+      $('detailRecordCount').textContent = `${goal.records.length} 笔记录`;
+
+      requestAnimationFrame(() => {
+        $('ringProgress').style.strokeDashoffset = 339.3 * (1 - s.pct / 100);
+      });
+
+      renderTimeline(goal);
+    }
+
+    function renderTimeline(goal) {
+      const box = $('timeline');
+      if (!goal.records.length) {
+        box.innerHTML = '<div style="padding: 40px; text-align: center; color: var(--ink-muted); font-size: 13px;">还没有存钱记录<br/>存下第一笔，让心愿向前迈进一步</div>';
+        return;
+      }
+
+      const groups = {};
+      [...goal.records].sort((a, b) => `${b.date}${b.createdAt}`.localeCompare(`${a.date}${a.createdAt}`)).forEach(r => {
+        (groups[r.date] ||= []).push(r);
+      });
+
+      box.innerHTML = Object.entries(groups).sort((a, b) => b[0].localeCompare(a[0])).map(([date, records]) => `
+        <div class="timeline-group">
+          <div class="timeline-date-label">${date === today() ? '今天' : formatDate(date)}</div>
+          ${records.map(r => `
+            <div class="timeline-item">
+              <div class="timeline-item-icon">＋</div>
+              <div class="timeline-item-main">
+                <p class="timeline-item-note">${escapeHtml(r.note || '存入一笔')}</p>
+                <div class="timeline-item-time">${date === today() ? '今天' : formatDate(date)}</div>
+              </div>
+              <strong class="timeline-item-amount">+${money(r.amount)}</strong>
+              <button class="timeline-delete-btn" data-record="${r.id}" aria-label="删除记录">×</button>
+            </div>
+          `).join('')}
+        </div>
+      `).join('');
+
+      box.querySelectorAll('.timeline-delete-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (!confirm('确定删除这笔存钱记录吗？')) return;
+          const g = state.goals.find(x => x.id === state.currentGoalId);
+          g.records = g.records.filter(r => r.id !== btn.dataset.record);
+          save();
+          renderDetail();
+          renderAllViews();
+          showToast('已删除存钱记录');
+        });
+      });
+    }
+
+    // 弹窗控制与图片选择
+    function openModal(id) {
+      $(id).classList.add('open');
+      $(id).setAttribute('aria-hidden', 'false');
+      setTimeout(() => $(id).querySelector('input')?.focus(), 80);
+    }
+
+    function closeModal(id) {
+      $(id).classList.remove('open');
+      $(id).setAttribute('aria-hidden', 'true');
+    }
+
+    // 动态渲染分类画廊
+    function renderPresetGallery(category = 'all') {
+      const container = $('presetGallery');
+      if (!container) return;
+      const list = category === 'all' ? PRESET_ITEMS : PRESET_ITEMS.filter(item => item.category === category);
+      container.innerHTML = list.map(item => `
+        <div class="preset-item ${state.selectedCover === item.src ? 'selected' : ''}" data-src="${item.src}" data-name="${item.name}" data-target="${item.target}">
+          <img src="${item.src}" alt="${item.tag}" onerror="this.onerror=null;this.src='assets/mascot-piggy.jpg';" />
+          <div class="preset-tag-label">${item.tag}</div>
+        </div>
+      `).join('');
+
+      container.querySelectorAll('.preset-item').forEach(el => {
+        el.addEventListener('click', () => {
+          container.querySelectorAll('.preset-item').forEach(i => i.classList.remove('selected'));
+          el.classList.add('selected');
+          state.selectedCover = el.dataset.src;
+          if (el.dataset.name) $('goalName').value = el.dataset.name;
+          if (el.dataset.target) $('goalTarget').value = el.dataset.target;
+        });
+      });
+    }
+
+    // 分类 Tab 切换监听
+    document.querySelectorAll('#galleryFilterTabs .gallery-tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#galleryFilterTabs .gallery-tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderPresetGallery(btn.dataset.cat);
+      });
+    });
+
+    function openGoalModal() {
+      state.selectedCover = 'assets/goal-car.jpg';
+      $('goalForm').reset();
+      $('goalName').value = '买一辆属于自己的车 · 智能轿跑';
+      $('goalTarget').value = 180000;
+      $('goalError').textContent = '';
+      
+      // 重置分类 Tab 与画廊
+      document.querySelectorAll('#galleryFilterTabs .gallery-tab-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.cat === 'all');
+      });
+      renderPresetGallery('all');
+      openModal('goalModal');
+    }
+
+    // 本地传图支持（使用 reader 转成 base64）
+    $('goalImageInput').addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        state.selectedCover = reader.result;
+        document.querySelectorAll('.preset-item').forEach(item => item.classList.remove('selected'));
+        showToast('已载入自定义封面图');
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // 目标表单提交
+    $('goalForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const name = $('goalName').value.trim();
+      const target = Number($('goalTarget').value);
+
+      if (!name || !target || target <= 0) {
+        $('goalError').textContent = '请填写有效的心愿名称和目标金额';
+        showToast('请检查心愿名称和金额', 'error');
+        return;
+      }
+
+      state.goals.unshift({
+        id: uid(),
+        name,
+        target,
+        image: state.selectedCover || 'assets/goal-switch.jpg',
+        archived: false,
+        createdAt: Date.now(),
+        records: []
+      });
+
+      save();
+      closeModal('goalModal');
+      renderAllViews();
+      showToast(`已创建心愿「${name}」`);
+    });
+
+    // 存入一笔表单提交与礼花动画
+    $('savingForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const amount = Number($('savingAmount').value);
+      const date = $('savingDate').value;
+
+      if (!amount || amount <= 0 || !date) {
+        $('savingError').textContent = '请输入有效金额和存钱日期';
+        showToast('请输入有效的金额和日期', 'error');
+        return;
+      }
+
+      const goal = state.goals.find(g => g.id === state.currentGoalId);
+      if (!goal) return;
+
+      goal.records.push({
+        id: uid(),
+        amount,
+        note: $('savingNote').value.trim(),
+        date: date,
+        createdAt: Date.now()
+      });
+
+      save();
+      closeModal('savingModal');
+      renderDetail();
+      renderAllViews();
+      celebrate();
+      showToast(`已存入 ${money(amount)}，离梦想又近了一步！`);
+    });
+
+    // 温暖礼花动效
+    function celebrate() {
+      const c = $('celebrateCanvas');
+      const ctx = c.getContext('2d');
+      c.width = window.innerWidth;
+      c.height = window.innerHeight;
+      const palette = ['#E6643B', '#FFB088', '#3F8A6B', '#FFD166', '#7563A8'];
+      const pieces = Array.from({ length: 24 }, (_, i) => ({
+        x: innerWidth / 2,
+        y: innerHeight - 80,
+        vx: (Math.random() - 0.5) * 8,
+        vy: -Math.random() * 8 - 4,
+        size: Math.random() * 6 + 4,
+        life: 1,
+        color: palette[i % palette.length],
+        round: Math.random() > 0.4
+      }));
+
+      function frame() {
+        ctx.clearRect(0, 0, c.width, c.height);
+        pieces.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.16;
+          p.life -= 0.016;
+          ctx.globalAlpha = Math.max(0, p.life);
+          ctx.fillStyle = p.color;
+          if (p.round) {
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size / 2, 0, Math.PI * 2);
+            ctx.fill();
+          } else {
+            ctx.fillRect(p.x, p.y, p.size, p.size);
+          }
+        });
+        if (pieces.some(p => p.life > 0)) {
+          requestAnimationFrame(frame);
+        }
+      }
+      requestAnimationFrame(frame);
+    }
+
+    // 绑定各类按钮事件
+    $('newGoalTop').onclick =
+      $('emptyCreate').onclick =
+      $('emptyGoalsCreate').onclick =
+      $('newGoalPage').onclick =
+      $('navAddGoal').onclick = openGoalModal;
+
+    $('addSaving').onclick = () => {
+      const goal = state.goals.find(g => g.id === state.currentGoalId);
+      if (!goal) return;
+      $('savingForm').reset();
+      $('savingDate').value = today();
+      $('savingModalSub').textContent = `为「${goal.name}」存下一份期待`;
+      $('savingError').textContent = '';
+      openModal('savingModal');
+    };
+
+    $('backHome').onclick = openHome;
+
+    $('toggleArchived').onclick = () => {
+      state.showArchived = !state.showArchived;
+      renderHome();
+      showToast(state.showArchived ? '已展开归档目标' : '已收起归档目标');
+    };
+
+    $('toggleArchivedPage').onclick = () => {
+      state.showArchived = !state.showArchived;
+      renderGoalsPage();
+      showToast(state.showArchived ? '已展开归档目标' : '已收起归档目标');
+    };
+
+    document.querySelectorAll('[data-route]').forEach(btn => {
+      btn.addEventListener('click', () => switchRoute(btn.dataset.route));
+    });
+
+    document.querySelectorAll('[data-close]').forEach(btn => {
+      btn.addEventListener('click', () => closeModal(btn.dataset.close));
+    });
+
+    document.querySelectorAll('.modal-backdrop').forEach(modal => {
+      modal.addEventListener('click', e => {
+        if (e.target === modal) closeModal(modal.id);
+      });
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-backdrop.open').forEach(m => closeModal(m.id));
+      }
+    });
+
+    document.addEventListener('click', e => {
+      if (!e.target.closest('.goal-menu')) {
+        document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('open'));
+      }
+    });
+
+    // 初始化入口
+    load();
+    renderHome();
+
+    const initialRoute = location.hash.slice(1);
+    if (initialRoute && initialRoute !== 'home' && initialRoute !== 'detail') {
+      switchRoute(initialRoute, false);
+    }
+
+    window.addEventListener('popstate', () => {
+      const route = location.hash.slice(1) || 'home';
+      if (route === 'detail' && state.currentGoalId) {
+        document.querySelectorAll('.view').forEach(view => view.classList.remove('active'));
+        $('detailView').classList.add('active');
+        renderDetail();
+        return;
+      }
+      switchRoute(route, false);
+    });
+
+    // 注册 PWA Service Worker 与在线热更新机制
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').then(reg => {
+          reg.addEventListener('updatefound', () => {
+            const newWorker = reg.installing;
+            if (newWorker) {
+              newWorker.addEventListener('statechange', () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                  showToast('发现新版本，已自动拉取更新！');
+                }
+              });
+            }
+          });
+        }).catch(err => {
+          console.log('SW registration note:', err);
+        });
+      });
+    }
+  </script>
+</body>
+</html>

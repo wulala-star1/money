@@ -1,0 +1,25 @@
+{
+  "name": "小猪存钱 · 把每个心愿存成生活",
+  "short_name": "小猪存钱",
+  "description": "温馨治愈日系手账风存钱罐，把想要的生活存下来",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#FAF7F2",
+  "theme_color": "#E6643B",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
