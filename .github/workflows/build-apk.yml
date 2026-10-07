@@ -42,9 +42,7 @@ jobs:
       - name: 编译并生成 APK
         run: |
           cd android
-          gradle wrapper
-          chmod +x gradlew
-          ./gradlew assembleDebug --stacktrace
+          gradle assembleDebug --info 2>&1 | tee build.log || (echo "=== GRADLE LOGS ===" && tail -n 120 build.log && exit 1)
           
           # 自动寻找编译出的 APK 并复制到根目录
           find . -name "*.apk" -exec cp {} ../piggy-save-release.apk \;
