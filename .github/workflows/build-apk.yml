@@ -1,0 +1,92 @@
+name: 打包 Android 原生 App (APK)
+
+on:
+  workflow_dispatch: # 支持在 GitHub Actions 网页点击一键手动打包
+  push:
+    branches:
+      - main
+    paths:
+      - 'index.html'
+      - 'manifest.json'
+      - 'twa-manifest.json'
+      - 'sw.js'
+      - '.github/workflows/build-apk.yml'
+
+jobs:
+  build-apk:
+    name: 自动化编译与签名 APK
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: 检出仓库代码
+        uses: actions/checkout@v4
+
+      - name: 配置 Java JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: 配置 Android SDK 环境
+        uses: android-actions/setup-android@v3
+
+      - name: 配置 Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 安装 Google 官方 Bubblewrap 打包工具
+        run: |
+          npm install -g @bubblewrap/cli
+
+      - name: 生成 Android 签名证书 (Keystore)
+        run: |
+          keytool -genkey -v \
+            -keystore android.keystore \
+            -alias android \
+            -keyalg RSA \
+            -keysize 2048 \
+            -validity 10000 \
+            -storepass 123456 \
+            -keypass 123456 \
+            -dname "CN=Xiaozhu, OU=MoneyApp, O=Wulala, L=Beijing, ST=Beijing, C=CN"
+
+      - name: 编译并生成签名 APK
+        env:
+          BUBBLEWRAP_KEYSTORE_PASSWORD: "123456"
+          BUBBLEWRAP_KEY_PASSWORD: "123456"
+        run: |
+          # 使用预置的标准 twa-manifest.json 自动构建 APK
+          bubblewrap build --skipPwaValidation
+          
+          # 将输出的签名安装包重命名为用户友好名称
+          find . -name "*signed*.apk" -exec cp {} ./piggy-save-release.apk \;
+          ls -lh piggy-save-release.apk
+
+      - name: 上传 APK 安装包至 GitHub 产物 (Artifacts)
+        uses: actions/upload-artifact@v4
+        with:
+          name: piggy-save-android-apk
+          path: ./piggy-save-release.apk
+          retention-days: 30
+
+      - name: 发布至 GitHub Releases (方便手机直接扫码或点击下载)
+        uses: softprops/action-gh-release@v2
+        if: github.ref == 'refs/heads/main'
+        with:
+          tag_name: v1.0.0-release
+          name: 小猪存钱 Android App (v1.0.0)
+          body: |
+            ### 🐷 小猪存钱 · Android 安装包
+            - **版本**：v1.0.0
+            - **特性**：
+              - 原生全屏体验，沉浸式手账质感
+              - 支持 GitHub 云端无感热更新
+              - 本地离线高速缓存
+            
+            直接点击下方 `piggy-save-release.apk` 即可下载安装到安卓手机！
+          files: ./piggy-save-release.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

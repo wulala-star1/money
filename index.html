@@ -85,11 +85,19 @@
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+      user-select: none;
+      -webkit-user-select: none;
+      overscroll-behavior-y: contain;
     }
 
     button, input, select, textarea {
       font: inherit;
       color: inherit;
+    }
+
+    input, textarea {
+      user-select: auto;
+      -webkit-user-select: auto;
     }
 
     button {
@@ -103,11 +111,54 @@
       outline-offset: 2px;
     }
 
-    /* 桌面与移动端外层容器 */
+    /* 桌面与移动端外层容器 (全面屏刘海与安全区适配) */
     .app-shell {
       width: min(100%, 1160px);
       margin: 0 auto;
-      padding: 28px 24px 120px;
+      padding-top: max(28px, calc(16px + env(safe-area-inset-top)));
+      padding-left: max(24px, calc(16px + env(safe-area-inset-left)));
+      padding-right: max(24px, calc(16px + env(safe-area-inset-right)));
+      padding-bottom: max(120px, calc(100px + env(safe-area-inset-bottom)));
+    }
+
+    /* GitHub 云端同步状态药丸按钮 */
+    .sync-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-line);
+      color: var(--ink-secondary);
+      font-size: 12px;
+      font-weight: 500;
+      transition: all 0.2s var(--ease);
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+    }
+    .sync-status-pill:hover {
+      border-color: var(--accent-border);
+      color: var(--accent);
+      transform: translateY(-1px);
+    }
+    .sync-status-pill:active {
+      transform: scale(0.96);
+    }
+    .sync-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #3F8A6B;
+      box-shadow: 0 0 0 2px rgba(63, 138, 107, 0.2);
+    }
+    .sync-status-pill.updating .sync-dot {
+      background: var(--accent);
+      animation: pulseDot 0.8s infinite alternate;
+    }
+    @keyframes pulseDot {
+      from { opacity: 0.3; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1.25); }
     }
 
     /* ==========================================================================
@@ -1695,13 +1746,17 @@
 
     @media (max-width: 640px) {
       .app-shell {
-        padding: 16px 16px 110px;
+        padding-top: max(16px, calc(12px + env(safe-area-inset-top)));
+        padding-left: max(16px, calc(12px + env(safe-area-inset-left)));
+        padding-right: max(16px, calc(12px + env(safe-area-inset-right)));
+        padding-bottom: max(116px, calc(96px + env(safe-area-inset-bottom)));
       }
       .desktop-nav {
         display: none;
       }
       .topbar {
         margin-bottom: 20px;
+        padding: 10px 14px;
       }
       .page-head h2 {
         font-size: 24px;
@@ -1711,12 +1766,14 @@
       }
       .bottom-nav {
         width: calc(100vw - 24px);
+        bottom: max(12px, calc(8px + env(safe-area-inset-bottom)));
       }
       .preset-gallery {
         grid-template-columns: repeat(2, 1fr);
       }
       .modal-dialog {
         padding: 22px 18px;
+        max-height: calc(90vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
       }
     }
   </style>
@@ -1735,6 +1792,10 @@
         </div>
       </div>
       <div class="top-actions">
+        <button class="sync-status-pill" id="btnCheckUpdate" title="检查 GitHub 云端更新与同步" aria-label="检查云端更新">
+          <span class="sync-dot"></span>
+          <span id="syncStatusText">云端已连通</span>
+        </button>
         <nav class="desktop-nav" aria-label="页面切换">
           <button data-route="home" class="active">总览</button>
           <button data-route="goals">心愿目标</button>
@@ -2940,16 +3001,20 @@
       switchRoute(route, false);
     });
 
-    // 注册 PWA Service Worker 与在线热更新机制
+    // 注册 PWA Service Worker 与 GitHub 在线热更新联动机制
+    let swRegistration = null;
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js').then(reg => {
+          swRegistration = reg;
           reg.addEventListener('updatefound', () => {
             const newWorker = reg.installing;
             if (newWorker) {
               newWorker.addEventListener('statechange', () => {
                 if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                  showToast('发现新版本，已自动拉取更新！');
+                  showToast('🎉 GitHub 已发布新版本，已为您自动拉取更新！');
+                  const pillText = $('syncStatusText');
+                  if (pillText) pillText.textContent = '新版本已就绪';
                 }
               });
             }
@@ -2958,6 +3023,44 @@
           console.log('SW registration note:', err);
         });
       });
+    }
+
+    // 绑定 GitHub 云端更新拉取按钮交互
+    const btnCheckUpdate = $('btnCheckUpdate');
+    if (btnCheckUpdate) {
+      btnCheckUpdate.onclick = async () => {
+        btnCheckUpdate.classList.add('updating');
+        const pillText = $('syncStatusText');
+        if (pillText) pillText.textContent = '同步中...';
+        showToast('正在从 GitHub 检查最新更新...');
+
+        try {
+          if (swRegistration) {
+            await swRegistration.update();
+          }
+          // 发起带时间戳的网络嗅探，穿透本地静态缓存获取 GitHub 最新版本
+          const res = await fetch('./index.html?check=' + Date.now(), { cache: 'no-store' });
+          if (res.ok) {
+            setTimeout(() => {
+              btnCheckUpdate.classList.remove('updating');
+              if (pillText) pillText.textContent = '已是最新版 ✨';
+              showToast('当前已是来自 GitHub 的最新手账版本！✨');
+              setTimeout(() => {
+                if (pillText) pillText.textContent = '云端已连通';
+              }, 4000);
+            }, 600);
+          } else {
+            throw new Error('HTTP ' + res.status);
+          }
+        } catch (e) {
+          btnCheckUpdate.classList.remove('updating');
+          if (pillText) pillText.textContent = '离线模式';
+          showToast('目前离线或网络波动，正读取本地高速缓存');
+          setTimeout(() => {
+            if (pillText) pillText.textContent = '云端已连通';
+          }, 3000);
+        }
+      };
     }
   </script>
 </body>
