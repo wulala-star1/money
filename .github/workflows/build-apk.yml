@@ -29,17 +29,17 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: 配置 Android SDK 环境
-        uses: android-actions/setup-android@v3
-
       - name: 配置 Node.js 20
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - name: 安装 Google 官方 Bubblewrap 打包工具
+      - name: 安装与配置 Google 官方 Bubblewrap 打包工具
         run: |
           npm install -g @bubblewrap/cli
+          # 自动配置 JDK 与系统预装的 Android SDK 路径
+          bubblewrap updateConfig --jdkPath="$JAVA_HOME" --androidSdkPath="$ANDROID_HOME"
+          bubblewrap doctor
 
       - name: 生成 Android 签名证书 (Keystore)
         run: |
