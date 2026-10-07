@@ -29,21 +29,10 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: 接受 Android SDK 协议
+      - name: 接受 Android SDK 协议并确保平台工具
         run: |
           yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses || true
-
-      - name: 生成 Android 签名证书 (Keystore)
-        run: |
-          keytool -genkey -v \
-            -keystore android.keystore \
-            -alias android \
-            -keyalg RSA \
-            -keysize 2048 \
-            -validity 10000 \
-            -storepass 123456 \
-            -keypass 123456 \
-            -dname "CN=Xiaozhu, OU=MoneyApp, O=Wulala, L=Beijing, ST=Beijing, C=CN"
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-34" "build-tools;34.0.0" || true
 
       - name: 设置 Gradle 8.2 编译环境
         uses: gradle/actions/setup-gradle@v3
@@ -53,7 +42,7 @@ jobs:
       - name: 编译并生成 APK
         run: |
           cd android
-          gradle assemble --stacktrace
+          gradle assembleRelease --stacktrace || gradle assembleDebug --stacktrace
           
           # 自动寻找编译出的 APK 并复制到根目录
           find . -name "*.apk" -exec cp {} ../piggy-save-release.apk \;
