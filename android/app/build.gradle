@@ -14,19 +14,10 @@ android {
         versionName "1.0.0"
     }
 
-    signingConfigs {
-        release {
-            storeFile file("../../android.keystore")
-            storePassword "123456"
-            keyAlias "android"
-            keyPassword "123456"
-        }
-    }
-
     buildTypes {
         release {
             minifyEnabled false
-            signingConfig signingConfigs.release
+            signingConfig signingConfigs.debug
         }
     }
 

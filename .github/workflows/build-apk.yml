@@ -45,16 +45,18 @@ jobs:
             -keypass 123456 \
             -dname "CN=Xiaozhu, OU=MoneyApp, O=Wulala, L=Beijing, ST=Beijing, C=CN"
 
-      - name: 设置 Gradle 编译环境
+      - name: 设置 Gradle 8.2 编译环境
         uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.2'
 
-      - name: 编译并生成签名 APK
+      - name: 编译并生成 APK
         run: |
           cd android
-          gradle assembleRelease --stacktrace
+          gradle assemble --stacktrace
           
-          # 将输出的 Release APK 复制到根目录
-          find . -name "*release*.apk" -exec cp {} ../piggy-save-release.apk \;
+          # 自动寻找编译出的 APK 并复制到根目录
+          find . -name "*.apk" -exec cp {} ../piggy-save-release.apk \;
           cd ..
           ls -lh piggy-save-release.apk
 
