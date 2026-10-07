@@ -51,6 +51,10 @@ jobs:
             console.log("Bubblewrap config created:", cfg);
           '
 
+      - name: 接受 Android SDK 协议
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses || true
+
       - name: 生成 Android 签名证书 (Keystore)
         run: |
           keytool -genkey -v \
@@ -63,12 +67,16 @@ jobs:
             -keypass 123456 \
             -dname "CN=Xiaozhu, OU=MoneyApp, O=Wulala, L=Beijing, ST=Beijing, C=CN"
 
+      - name: 生成 Android 原生工程结构
+        run: |
+          bubblewrap update --skipPrompt
+
       - name: 编译并生成签名 APK
         env:
           BUBBLEWRAP_KEYSTORE_PASSWORD: "123456"
           BUBBLEWRAP_KEY_PASSWORD: "123456"
         run: |
-          # 使用预置的标准 twa-manifest.json 自动构建 APK
+          # 自动编译并签名 APK
           bubblewrap build --skipPwaValidation
           
           # 将输出的签名安装包重命名为用户友好名称
