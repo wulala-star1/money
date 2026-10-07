@@ -42,7 +42,9 @@ jobs:
       - name: 编译并生成 APK
         run: |
           cd android
-          gradle assembleRelease --stacktrace || gradle assembleDebug --stacktrace
+          gradle wrapper
+          chmod +x gradlew
+          ./gradlew assembleDebug --stacktrace
           
           # 自动寻找编译出的 APK 并复制到根目录
           find . -name "*.apk" -exec cp {} ../piggy-save-release.apk \;
