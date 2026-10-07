@@ -37,9 +37,19 @@ jobs:
       - name: 安装与配置 Google 官方 Bubblewrap 打包工具
         run: |
           npm install -g @bubblewrap/cli
-          # 自动配置 JDK 与系统预装的 Android SDK 路径
-          bubblewrap updateConfig --jdkPath="$JAVA_HOME" --androidSdkPath="$ANDROID_HOME"
-          bubblewrap doctor
+          node -e '
+            const fs = require("fs");
+            const path = require("path");
+            const os = require("os");
+            const dir = path.join(os.homedir(), ".bubblewrap");
+            if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+            const cfg = {
+              jdkPath: process.env.JAVA_HOME,
+              androidSdkPath: process.env.ANDROID_HOME
+            };
+            fs.writeFileSync(path.join(dir, "config.json"), JSON.stringify(cfg, null, 2));
+            console.log("Bubblewrap config created:", cfg);
+          '
 
       - name: 生成 Android 签名证书 (Keystore)
         run: |
