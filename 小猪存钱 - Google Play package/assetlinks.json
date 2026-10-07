@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "io.github.wulala_star1.twa",
+        "sha256_cert_fingerprints": ["2D:65:77:0E:33:8D:4C:89:56:50:56:09:6C:92:CD:C4:27:09:00:93:F4:0B:28:EB:03:DB:51:37:F7:0C:2D:79"]
+      }
+    }]

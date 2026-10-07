@@ -1,20 +1,20 @@
 name: 打包 Android 原生 App (APK)
 
 on:
-  workflow_dispatch: # 支持在 GitHub Actions 网页点击一键手动打包
+  workflow_dispatch:
   push:
     branches:
       - main
     paths:
       - 'index.html'
       - 'manifest.json'
-      - 'twa-manifest.json'
       - 'sw.js'
+      - 'android/**'
       - '.github/workflows/build-apk.yml'
 
 jobs:
   build-apk:
-    name: 自动化编译与签名 APK
+    name: Gradle 自动化编译与签名 APK
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -28,28 +28,6 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-
-      - name: 配置 Node.js 20
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: 安装与配置 Google 官方 Bubblewrap 打包工具
-        run: |
-          npm install -g @bubblewrap/cli
-          node -e '
-            const fs = require("fs");
-            const path = require("path");
-            const os = require("os");
-            const dir = path.join(os.homedir(), ".bubblewrap");
-            if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-            const cfg = {
-              jdkPath: process.env.JAVA_HOME,
-              androidSdkPath: process.env.ANDROID_HOME
-            };
-            fs.writeFileSync(path.join(dir, "config.json"), JSON.stringify(cfg, null, 2));
-            console.log("Bubblewrap config created:", cfg);
-          '
 
       - name: 接受 Android SDK 协议
         run: |
@@ -67,20 +45,17 @@ jobs:
             -keypass 123456 \
             -dname "CN=Xiaozhu, OU=MoneyApp, O=Wulala, L=Beijing, ST=Beijing, C=CN"
 
-      - name: 生成 Android 原生工程结构
-        run: |
-          bubblewrap update --skipPrompt
+      - name: 设置 Gradle 编译环境
+        uses: gradle/actions/setup-gradle@v3
 
       - name: 编译并生成签名 APK
-        env:
-          BUBBLEWRAP_KEYSTORE_PASSWORD: "123456"
-          BUBBLEWRAP_KEY_PASSWORD: "123456"
         run: |
-          # 自动编译并签名 APK
-          bubblewrap build --skipPwaValidation
+          cd android
+          gradle assembleRelease --stacktrace
           
-          # 将输出的签名安装包重命名为用户友好名称
-          find . -name "*signed*.apk" -exec cp {} ./piggy-save-release.apk \;
+          # 将输出的 Release APK 复制到根目录
+          find . -name "*release*.apk" -exec cp {} ../piggy-save-release.apk \;
+          cd ..
           ls -lh piggy-save-release.apk
 
       - name: 上传 APK 安装包至 GitHub 产物 (Artifacts)
